@@ -12,10 +12,12 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                                  private val api: Api, private val storyType: Int) : MainContract.Presenter {
 
     private var disposable: Disposable? = null
+    private var requestApi: Flowable<ArrayList<Long>>? = null
+    var isLoading: Boolean = false
+    var stories: ArrayList<Long>? = null
+    private val loadedData: ArrayList<Long> = ArrayList()
 
     override fun subscribe() {
-        val requestApi: Flowable<ArrayList<Long>>?
-
         when (storyType) {
             StoryType.NEW.ordinal -> requestApi = api.getNewStories()
             StoryType.TOP.ordinal -> requestApi = api.getTopStories()
@@ -25,16 +27,40 @@ internal class MainPresenterImpl(private val view: MainContract.View,
 
         requestApi ?: return
 
-        disposable = requestApi
-                //.flatMap { Flowable.fromIterable(it) }
+        disposable = executeRequest()
+    }
+
+    override fun loadMore() {
+        Log.d(TAG, "request loadMore")
+
+        if (stories != null) {
+            requestApi = Flowable.just(stories)
+        }
+
+        disposable = executeRequest()
+    }
+
+    private fun executeRequest(): Disposable? {
+        return requestApi!!
+                .doOnNext { stories = it }
                 .flatMapIterable { it }
-                .doOnNext { Log.d(TAG, "received item id: $it") }
+                .doOnNext {
+                    loadedData.add(it)
+                    Log.d(TAG, "received story id: $it")
+                }
                 .flatMap { api.getItemDetailWith(id = it.toString()) }
                 .filter { !(it.dead && it.deleted) }
-                .take(LIMIT.toLong())
-                //.toList()
+                .take(LIMIT_ITEM)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    isLoading = true
+                    loadedData.clear()
+                }
+                .doOnComplete {
+                    isLoading = false
+                    stories?.removeAll(loadedData)
+                }
                 .subscribe { item ->
                     run {
                         view.onReceiveData(item)
@@ -48,6 +74,7 @@ internal class MainPresenterImpl(private val view: MainContract.View,
 
     companion object {
         private val TAG = "MainPresenterImpl"
-        val LIMIT = 30
+        val LIMIT_ITEM: Long = 30
+        val LOADING_VISIBLE_THRESHOLD = 5
     }
 }

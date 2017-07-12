@@ -8,17 +8,17 @@ abstract class BaseFragment : Fragment() {
     val component: ApplicationComponent
         get() = (activity as BaseActivity).component
 
-    protected var presenter: BasePresenter? = null
-
     override fun onStart() {
         super.onStart()
-            presenter?.subscribe()
+            getPresenter()?.subscribe()
     }
 
     override fun onStop() {
         super.onStop()
-            presenter?.unsubscribe()
+            getPresenter()?.unsubscribe()
     }
+
+    protected open fun getPresenter() : BasePresenter? = null
 
     companion object {
         val TAG = "BaseFragment"

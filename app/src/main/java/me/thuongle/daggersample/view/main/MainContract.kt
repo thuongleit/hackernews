@@ -6,7 +6,10 @@ import me.thuongle.daggersample.view.base.NetworkView
 
 internal interface MainContract {
 
-    interface Presenter : BasePresenter
+    interface Presenter : BasePresenter {
+
+        fun loadMore()
+    }
 
     interface View : NetworkView {
 

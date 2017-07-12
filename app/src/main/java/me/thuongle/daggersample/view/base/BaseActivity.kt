@@ -17,21 +17,21 @@ abstract class BaseActivity : AppCompatActivity() {
     val component: ApplicationComponent
         get() = app.applicationComponent
 
-    protected val presenter: BasePresenter? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onStart() {
         super.onStart()
-        presenter?.subscribe()
+        getPresenter()?.subscribe()
     }
 
     override fun onStop() {
         super.onStop()
-        presenter?.unsubscribe()
+        getPresenter()?.unsubscribe()
     }
+
+    protected open fun getPresenter() : BasePresenter? = null
 
     fun reload() {
         overridePendingTransition(0, 0)

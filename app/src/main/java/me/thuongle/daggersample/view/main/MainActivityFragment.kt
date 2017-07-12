@@ -1,5 +1,6 @@
 package me.thuongle.daggersample.view.main
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,14 +17,30 @@ import me.thuongle.daggersample.util.getBaseDomain
 import me.thuongle.daggersample.util.getTimeAgo
 import me.thuongle.daggersample.view.base.BaseFragment
 import javax.inject.Inject
-import android.support.v4.content.ContextCompat.startActivity
 import android.widget.Toast
+import me.thuongle.daggersample.view.base.BasePresenter
 
 
 class MainActivityFragment : BaseFragment(), MainContract.View {
 
     @Inject internal
-    lateinit var injectPresenter: MainContract.Presenter
+    lateinit var presenter: MainContract.Presenter
+
+    override fun getPresenter(): BasePresenter? = presenter
+
+    private val onScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+
+        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val lastVisibleItemPosition = (recyclerView?.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+            val isLoading: Boolean = (presenter as MainPresenterImpl).isLoading
+            if (!isLoading &&
+                    lastVisibleItemPosition >= adapter.itemCount - MainPresenterImpl.LOADING_VISIBLE_THRESHOLD) {
+                presenter.loadMore()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +53,6 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
                 .mainModule(MainModule(this, type))
                 .build()
                 .inject(this)
-
-        presenter = injectPresenter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -56,8 +71,15 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.setHasFixedSize(true)
 
-        adapter = ItemRecyclerViewAdapter()
+        adapter = ItemRecyclerViewAdapter(activity)
         recyclerView.adapter = adapter
+
+        recyclerView.addOnScrollListener(onScrollListener)
+    }
+
+    override fun onDestroyView() {
+        recyclerView.removeOnScrollListener(onScrollListener)
+        super.onDestroyView()
     }
 
     override fun onReceiveData(item: Item) {
@@ -84,11 +106,11 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         }
     }
 
-    inner class ItemRecyclerViewAdapter : RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder>() {
+    private class ItemRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder>() {
         val data: MutableList<Item> = mutableListOf()
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder
-                = ViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_layout, parent, false))
+                = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind(data[position])
@@ -109,7 +131,7 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
 
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     if (intent.resolveActivity(context.packageManager) != null) {
-                        startActivity(intent)
+                        context.startActivity(intent)
                     }
                 }
             }
