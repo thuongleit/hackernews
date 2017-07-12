@@ -18,6 +18,15 @@ interface Api {
     @GET("beststories.json")
     fun getBestStories(): Flowable<ArrayList<Long>>
 
+    @GET("askstories.json")
+    fun getAskstories(): Flowable<ArrayList<Long>>
+
+    @GET("showstories.json")
+    fun getShowstories(): Flowable<ArrayList<Long>>
+
+    @GET("jobstories")
+    fun getJobstories(): Flowable<ArrayList<Long>>
+
     @GET("item/{id}.json")
     fun getItemDetailWith(@Path("id") id: String): Flowable<Item>
 

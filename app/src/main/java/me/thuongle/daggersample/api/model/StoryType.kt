@@ -1,5 +1,5 @@
 package me.thuongle.daggersample.api.model
 
 enum class StoryType {
-    NEW, TOP, BEST
+    NEW, TOP, BEST, ASK, SHOW, JOB
 }

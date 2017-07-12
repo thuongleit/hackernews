@@ -12,40 +12,42 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                                  private val api: Api, private val storyType: Int) : MainContract.Presenter {
 
     private var disposable: Disposable? = null
-    private var requestApi: Flowable<ArrayList<Long>>? = null
+    private lateinit var flowableOfItems: Flowable<ArrayList<Long>>
+    private var allStories: ArrayList<Long>? = null
+    private val showedStories: ArrayList<Long> = ArrayList()
+
     var isLoading: Boolean = false
-    var stories: ArrayList<Long>? = null
-    private val loadedData: ArrayList<Long> = ArrayList()
 
     override fun subscribe() {
         when (storyType) {
-            StoryType.NEW.ordinal -> requestApi = api.getNewStories()
-            StoryType.TOP.ordinal -> requestApi = api.getTopStories()
-            StoryType.BEST.ordinal -> requestApi = api.getBestStories()
-            else -> requestApi = null
+            StoryType.NEW.ordinal -> flowableOfItems = api.getNewStories()
+            StoryType.TOP.ordinal -> flowableOfItems = api.getTopStories()
+            StoryType.BEST.ordinal -> flowableOfItems = api.getBestStories()
+            StoryType.ASK.ordinal -> flowableOfItems = api.getAskstories()
+            StoryType.SHOW.ordinal -> flowableOfItems = api.getShowstories()
+            StoryType.JOB.ordinal -> flowableOfItems = api.getJobstories()
+            else -> flowableOfItems = Flowable.empty()
         }
 
-        requestApi ?: return
-
-        disposable = executeRequest()
+        disposable = executeApiRequest()
     }
 
     override fun loadMore() {
         Log.d(TAG, "request loadMore")
 
-        if (stories != null) {
-            requestApi = Flowable.just(stories)
+        if (allStories != null) {
+            flowableOfItems = Flowable.just(allStories)
         }
 
-        disposable = executeRequest()
+        disposable = executeApiRequest()
     }
 
-    private fun executeRequest(): Disposable? {
-        return requestApi!!
-                .doOnNext { stories = it }
+    private fun executeApiRequest(): Disposable? {
+        return flowableOfItems
+                .doOnNext { if (allStories == null) allStories = it }
                 .flatMapIterable { it }
                 .doOnNext {
-                    loadedData.add(it)
+                    showedStories.add(it)
                     Log.d(TAG, "received story id: $it")
                 }
                 .flatMap { api.getItemDetailWith(id = it.toString()) }
@@ -55,11 +57,11 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     isLoading = true
-                    loadedData.clear()
+                    showedStories.clear()
                 }
                 .doOnComplete {
                     isLoading = false
-                    stories?.removeAll(loadedData)
+                    allStories?.removeAll(showedStories)
                 }
                 .subscribe { item ->
                     run {

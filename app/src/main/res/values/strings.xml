@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Dagger Sample</string>
+    <!-- Menu title strings -->
     <string name="title_new">New</string>
     <string name="title_best">Best</string>
     <string name="title_top">Top</string>
+    <string name="title_ask">Ask</string>
+    <string name="title_show">Show</string>
+    <string name="title_job">Job</string>
 
     <!-- Dialog action buttons-->
     <string name="dialog_action_ok">OK</string>
