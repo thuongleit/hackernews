@@ -14,5 +14,6 @@ internal interface MainContract {
     interface View : NetworkView {
 
         fun onReceiveData(item: Item)
+        fun onError(t: Throwable)
     }
 }

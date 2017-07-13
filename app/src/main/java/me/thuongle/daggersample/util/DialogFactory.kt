@@ -32,15 +32,11 @@ object DialogFactory {
                 context.getString(messageResource))
     }
 
-    fun createGenericErrorDialog(context: Context, message: String): Dialog {
+    fun createGenericErrorDialog(context: Context): Dialog {
         val alertDialog = AlertDialog.Builder(context)
-                .setMessage(message)
+                .setMessage(R.string.error_generic_error_message)
                 .setPositiveButton(R.string.dialog_action_ok, null)
         return alertDialog.create()
-    }
-
-    fun createGenericErrorDialog(context: Context, @StringRes messageResource: Int): Dialog {
-        return createGenericErrorDialog(context, context.getString(messageResource))
     }
 
     //    public static AlertDialog createProgressDialog(Context context) {

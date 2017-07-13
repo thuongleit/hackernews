@@ -24,7 +24,7 @@ interface Api {
     @GET("showstories.json")
     fun getShowstories(): Flowable<ArrayList<Long>>
 
-    @GET("jobstories")
+    @GET("jobstories.json")
     fun getJobstories(): Flowable<ArrayList<Long>>
 
     @GET("item/{id}.json")

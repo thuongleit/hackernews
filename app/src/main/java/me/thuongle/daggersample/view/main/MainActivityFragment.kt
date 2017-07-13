@@ -10,15 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import me.thuongle.daggersample.R
-import me.thuongle.daggersample.api.model.StoryType
 import me.thuongle.daggersample.api.model.Item
+import me.thuongle.daggersample.api.model.StoryType
+import me.thuongle.daggersample.util.DialogFactory
 import me.thuongle.daggersample.util.getBaseDomain
 import me.thuongle.daggersample.util.getTimeAgo
 import me.thuongle.daggersample.view.base.BaseFragment
-import javax.inject.Inject
-import android.widget.Toast
 import me.thuongle.daggersample.view.base.BasePresenter
+import javax.inject.Inject
 
 
 class MainActivityFragment : BaseFragment(), MainContract.View {
@@ -84,6 +85,10 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
 
     override fun onReceiveData(item: Item) {
         adapter.add(item)
+    }
+
+    override fun onError(t: Throwable) {
+        DialogFactory.createGenericErrorDialog(context).show()
     }
 
     override fun showNetworkError() {

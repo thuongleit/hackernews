@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.thuongle.daggersample.api.endpoint.Api
+import me.thuongle.daggersample.api.model.Item
 import me.thuongle.daggersample.api.model.StoryType
 
 internal class MainPresenterImpl(private val view: MainContract.View,
@@ -44,6 +45,7 @@ internal class MainPresenterImpl(private val view: MainContract.View,
 
     private fun executeApiRequest(): Disposable? {
         return flowableOfItems
+                .subscribeOn(Schedulers.io())
                 .doOnNext { if (allStories == null) allStories = it }
                 .flatMapIterable { it }
                 .doOnNext {
@@ -52,8 +54,8 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                 }
                 .flatMap { api.getItemDetailWith(id = it.toString()) }
                 .filter { !(it.dead && it.deleted) }
+                .onErrorResumeNext { t: Throwable -> Log.e(TAG, "Failed to load item with id $t"); Flowable.empty<Item>() }
                 .take(LIMIT_ITEM)
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     isLoading = true
@@ -63,11 +65,10 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                     isLoading = false
                     allStories?.removeAll(showedStories)
                 }
-                .subscribe { item ->
-                    run {
-                        view.onReceiveData(item)
-                    }
-                }
+                .subscribe(
+                        { view.onReceiveData(it) },
+                        { t -> view.onError(t) }
+                )
     }
 
     override fun unsubscribe() {
