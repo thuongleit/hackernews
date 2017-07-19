@@ -8,71 +8,98 @@ import io.reactivex.schedulers.Schedulers
 import me.thuongle.daggersample.api.endpoint.Api
 import me.thuongle.daggersample.api.model.Item
 import me.thuongle.daggersample.api.model.StoryType
+import java.io.IOException
 
 internal class MainPresenterImpl(private val view: MainContract.View,
                                  private val api: Api, private val storyType: Int) : MainContract.Presenter {
 
     private var disposable: Disposable? = null
-    private lateinit var flowableOfItems: Flowable<ArrayList<Long>>
-    private var allStories: ArrayList<Long>? = null
-    private val showedStories: ArrayList<Long> = ArrayList()
 
+    private var allStoryIds: ArrayList<Long>? = null
+    private val takenStoryIds: ArrayList<Long> = ArrayList()
     var isLoading: Boolean = false
 
     override fun subscribe() {
-        when (storyType) {
-            StoryType.NEW.ordinal -> flowableOfItems = api.getNewStories()
-            StoryType.TOP.ordinal -> flowableOfItems = api.getTopStories()
-            StoryType.BEST.ordinal -> flowableOfItems = api.getBestStories()
-            StoryType.ASK.ordinal -> flowableOfItems = api.getAskstories()
-            StoryType.SHOW.ordinal -> flowableOfItems = api.getShowstories()
-            StoryType.JOB.ordinal -> flowableOfItems = api.getJobstories()
-            else -> flowableOfItems = Flowable.empty()
-        }
-
-        disposable = executeApiRequest()
+        disposable =
+                Flowable.just(takenStoryIds.isEmpty())
+                        .takeWhile { it }
+                        .flatMap { executeApiRequest() }
+                        .doOnSubscribe {
+                            view.showProgress(true)
+                            view.removeNetworkErrorLayoutIfNeeded()
+                        }
+                        .doOnNext { view.showProgress(false) }
+                        .doOnComplete { view.showProgress(false) }
+                        .subscribe { view.onReceiveData(it) }
     }
 
     override fun loadMore() {
-        Log.d(TAG, "request loadMore")
-
-        if (allStories != null) {
-            flowableOfItems = Flowable.just(allStories)
-        }
-
-        disposable = executeApiRequest()
+        Log.d(TAG, "loadMore")
+        disposable = executeApiRequest().subscribe { view.onReceiveData(it) }
     }
 
-    private fun executeApiRequest(): Disposable? {
-        return flowableOfItems
+    override fun reload() {
+        resetVariables()
+        subscribe()
+    }
+
+    private fun executeApiRequest(): Flowable<Item> {
+        return getItemEmitter()
                 .subscribeOn(Schedulers.io())
-                .doOnNext { if (allStories == null) allStories = it }
+                .doOnSubscribe { isLoading = true }
+                .doOnNext { if (allStoryIds == null) allStoryIds = it }
                 .flatMapIterable { it }
+                .take(LIMIT_ITEM)
                 .doOnNext {
-                    showedStories.add(it)
-                    Log.d(TAG, "received story id: $it")
+                    Log.d(TAG, "took story with id: $it")
+                    takenStoryIds.add(it)
                 }
                 .flatMap { api.getItemDetailWith(id = it.toString()) }
                 .filter { !(it.dead && it.deleted) }
-                .onErrorResumeNext { t: Throwable -> Log.e(TAG, "Failed to load item with id $t"); Flowable.empty<Item>() }
-                .take(LIMIT_ITEM)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    isLoading = true
-                    showedStories.clear()
-                }
                 .doOnComplete {
                     isLoading = false
-                    allStories?.removeAll(showedStories)
+                    allStoryIds?.removeAll(takenStoryIds)
                 }
-                .subscribe(
-                        { view.onReceiveData(it) },
-                        { t -> view.onError(t) }
-                )
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext { it: Throwable ->
+                    Log.e(TAG, it.message, it)
+
+                    view.showProgress(false)
+                    if (takenStoryIds.isEmpty()) {
+                        if (it is IOException) {
+                            view.showNetworkError(it)
+                        } else {
+                            view.showInAppError(it)
+                        }
+                    }
+
+                    Flowable.empty()
+                }
     }
 
     override fun unsubscribe() {
         disposable?.dispose()
+    }
+
+    private fun getItemEmitter(): Flowable<ArrayList<Long>> {
+        if (allStoryIds != null) {
+            return Flowable.just(allStoryIds)
+        }
+
+        return when (storyType) {
+            StoryType.NEW.ordinal -> api.getNewStories()
+            StoryType.TOP.ordinal -> api.getTopStories()
+            StoryType.BEST.ordinal -> api.getBestStories()
+            StoryType.ASK.ordinal -> api.getAskstories()
+            StoryType.SHOW.ordinal -> api.getShowstories()
+            StoryType.JOB.ordinal -> api.getJobstories()
+            else -> Flowable.empty()
+        }
+    }
+
+    private fun resetVariables() {
+        allStoryIds = null
+        takenStoryIds.clear()
     }
 
     companion object {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dagger Sample</string>
+    <string name="app_name">Hacker News</string>
     <!-- Menu title strings -->
     <string name="title_new">New</string>
     <string name="title_best">Best</string>
@@ -15,8 +15,7 @@
     <string name="dialog_action_try_again">Try Again</string>
 
     <!-- Error messages-->
-    <string name="error_connection_lost_title">Oh no!</string>
-    <string name="error_connection_lost_message">No Internet found. Check your connection and try again.</string>
+    <string name="error_connection_lost_message">No connection</string>
     <string name="error_generic_error_title">Sorry!</string>
     <string name="error_generic_error_message">There seems to be a problem. Please try again or send feedback to us to get help.</string>
     <string name="dialog_action_send_feedback">Send feedback</string>

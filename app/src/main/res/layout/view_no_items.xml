@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_no_items"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:drawablePadding="2dp"
+    android:drawableTint="@android:color/darker_gray"
+    android:drawableTop="@drawable/ic_coffee_empty_black_48dp"
+    android:gravity="center"
+    android:text="No Internet"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="@android:color/darker_gray" />

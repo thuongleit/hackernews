@@ -2,7 +2,7 @@ package me.thuongle.daggersample.view.base
 
 interface NetworkView : BaseView {
 
-    fun showNetworkError()
+    fun showNetworkError(t: Throwable)
 
-    fun showInAppError()
+    fun showInAppError(t: Throwable)
 }

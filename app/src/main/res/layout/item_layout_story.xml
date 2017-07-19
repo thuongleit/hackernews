@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
     android:layout_marginTop="2dp"
     android:background="?attr/selectableItemBackground">
 
-    <TextView
+    <me.thuongle.daggersample.widget.VectorAppCompatTextView
         android:id="@+id/tv_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,12 +15,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:layout_margin="2dp"
-        android:contentDescription="Icons made by Dave Gandy from www.flaticon.com is licensed by Creative Commons BY 3.0"
-        android:drawableTint="@android:color/darker_gray"
-        android:drawableTop="@drawable/ic_up"
-        android:gravity="center_horizontal"
-        android:textColor="@android:color/darker_gray" />
+        android:drawablePadding="-2dp"
+        android:gravity="center"
+        android:minWidth="30dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/darker_gray"
+        app:drawableTopCompat="@drawable/ic_up_darker_gray_16dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +41,7 @@
             android:text="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black" />
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -48,20 +49,41 @@
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|left"
-                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:gravity="start|left|center_vertical"
                 android:textColor="@android:color/darker_gray" />
+
+            <me.thuongle.daggersample.widget.VectorAppCompatTextView
+                android:id="@+id/tv_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv_description"
+                android:layout_toRightOf="@+id/tv_description"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="2dp"
+                android:gravity="right|end|center_vertical"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/darker_gray"
+                app:drawableRightCompat="@drawable/ic_chat_darker_gray_16dp" />
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:gravity="center_vertical"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="right|end|center_vertical"
                 android:textColor="@android:color/darker_gray" />
 
-        </FrameLayout>
-
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

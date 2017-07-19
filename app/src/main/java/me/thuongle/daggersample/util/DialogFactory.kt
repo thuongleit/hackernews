@@ -33,7 +33,7 @@ object DialogFactory {
     }
 
     fun createGenericErrorDialog(context: Context): Dialog {
-        val alertDialog = AlertDialog.Builder(context)
+        val alertDialog = AlertDialog.Builder(context, R.style.AppTheme_CustomDialog)
                 .setMessage(R.string.error_generic_error_message)
                 .setPositiveButton(R.string.dialog_action_ok, null)
         return alertDialog.create()

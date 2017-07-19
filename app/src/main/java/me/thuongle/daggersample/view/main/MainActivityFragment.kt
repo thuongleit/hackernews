@@ -6,9 +6,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import me.thuongle.daggersample.R
@@ -23,11 +27,16 @@ import javax.inject.Inject
 
 
 class MainActivityFragment : BaseFragment(), MainContract.View {
-
     @Inject internal
     lateinit var presenter: MainContract.Presenter
 
     override fun getPresenter(): BasePresenter? = presenter
+
+    private lateinit var adapter: ItemRecyclerViewAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var layoutContainer: FrameLayout
+    private lateinit var viewProgressBar: ProgressBar
+    private var layoutNoInternetError: View? = null
 
     private val onScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
 
@@ -61,12 +70,11 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    private lateinit var recyclerView: RecyclerView
-
-    private lateinit var adapter: ItemRecyclerViewAdapter
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        layoutContainer = view.findViewById(R.id.container) as FrameLayout
+        viewProgressBar = view.findViewById(R.id.progressbar) as ProgressBar
 
         recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -91,10 +99,34 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         DialogFactory.createGenericErrorDialog(context).show()
     }
 
-    override fun showNetworkError() {
+    override fun showNetworkError(t: Throwable) {
+        Log.d(TAG, "No Internet. ${t.message}")
+        if (layoutNoInternetError == null) {
+            layoutNoInternetError = LayoutInflater.from(context).inflate(R.layout.view_network_error, null)
+            layoutNoInternetError!!.findViewById(R.id.btn_retry).setOnClickListener {
+                presenter.subscribe()
+            }
+        }
+        val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        layoutContainer.addView(layoutNoInternetError, layoutParams)
     }
 
-    override fun showInAppError() {
+    override fun showInAppError(t: Throwable) {
+        DialogFactory.createGenericErrorDialog(context).show()
+    }
+
+    override fun showProgress(show: Boolean) {
+        if (show) {
+            viewProgressBar.visibility = View.VISIBLE
+        } else {
+            viewProgressBar.visibility = View.GONE
+        }
+    }
+
+    override fun removeNetworkErrorLayoutIfNeeded() {
+        if (layoutNoInternetError != null) {
+            layoutContainer.removeView(layoutNoInternetError)
+        }
     }
 
     companion object {
@@ -111,19 +143,26 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         }
     }
 
-    private class ItemRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder>() {
+    private class ItemRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<ItemRecyclerViewAdapter.StoryViewHolder>() {
         val data: MutableList<Item> = mutableListOf()
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder
-                = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false))
+        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): StoryViewHolder
+                = StoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout_story, parent, false))
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(data[position])
+        override fun onBindViewHolder(holderStory: StoryViewHolder, position: Int) {
+            holderStory.bind(data[position])
         }
 
         override fun getItemCount(): Int = data.size
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun add(item: Item) {
+            if (!data.contains(item)) {
+                data.add(item)
+                notifyItemInserted(data.size - 1)
+            }
+        }
+
+        inner class StoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             init {
                 itemView.setOnClickListener {
@@ -146,18 +185,31 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
             private val tvDescription: TextView = itemView.findViewById(R.id.tv_description) as TextView
             private val tvTime: TextView = itemView.findViewById(R.id.tv_time) as TextView
 
+            private val tvChat: TextView = itemView.findViewById(R.id.tv_chat) as TextView
+
+            init {
+                tvChat.setOnClickListener {
+                    Toast.makeText(context, "click on ${data[adapterPosition].id}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             fun bind(item: Item) {
                 tvUp.text = item.score.toString()
                 tvTitle.text = item.title
-                tvDescription.text = "by ${item.byUser} (${getBaseDomain(item.url)})"
+                val urlDes = if (TextUtils.isEmpty(item.url)) "" else " (${getBaseDomain(item.url)})"
+                tvDescription.text = "by ${item.byUser}$urlDes"
                 tvTime.text = getTimeAgo(item.time)
+
+                if (item.descendants != null && item.descendants > 0) {
+                    tvChat.text = "${item.descendants}"
+                    tvChat.visibility = View.VISIBLE
+                } else {
+                    tvChat.visibility = View.GONE
+                }
             }
+
         }
 
-        fun add(item: Item) {
-            data.add(item)
-            notifyItemInserted(data.size - 1)
-        }
+        inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 }
-
