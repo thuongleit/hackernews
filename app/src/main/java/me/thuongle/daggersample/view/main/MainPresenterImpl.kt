@@ -6,8 +6,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.thuongle.daggersample.api.endpoint.Api
-import me.thuongle.daggersample.api.model.Item
 import me.thuongle.daggersample.api.model.StoryType
+import java.io.IOException
 
 internal class MainPresenterImpl(private val view: MainContract.View,
                                  private val api: Api, private val storyType: Int) : MainContract.Presenter {
@@ -54,7 +54,7 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                 }
                 .flatMap { api.getItemDetailWith(id = it.toString()) }
                 .filter { !(it.dead && it.deleted) }
-                .onErrorResumeNext { t: Throwable -> Log.e(TAG, "Failed to load item with id $t"); Flowable.empty<Item>() }
+                //.onErrorResumeNext { t: Throwable -> Log.e(TAG, "Failed to load item with id $t"); Flowable.empty<Item>() }
                 .take(LIMIT_ITEM)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -67,7 +67,7 @@ internal class MainPresenterImpl(private val view: MainContract.View,
                 }
                 .subscribe(
                         { view.onReceiveData(it) },
-                        { t -> view.onError(t) }
+                        { t -> if (t is IOException) view.showNetworkError(t) else view.showInAppError(t) }
                 )
     }
 

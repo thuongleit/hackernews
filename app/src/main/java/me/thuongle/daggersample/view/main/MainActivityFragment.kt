@@ -6,9 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import me.thuongle.daggersample.R
@@ -91,10 +93,17 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         DialogFactory.createGenericErrorDialog(context).show()
     }
 
-    override fun showNetworkError() {
+    override fun showNetworkError(t: Throwable) {
+        Log.d(TAG, "No Internet. ${t.message}")
+        showInAppError(t)
+        val rootContent = activity.findViewById(android.R.id.content) as FrameLayout
+        val layoutNoInternetError = LayoutInflater.from(context).inflate(R.layout.view_network_error, null)
+        val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        rootContent.addView(layoutNoInternetError, layoutParams)
     }
 
-    override fun showInAppError() {
+    override fun showInAppError(t: Throwable) {
+        DialogFactory.createGenericErrorDialog(context).show()
     }
 
     companion object {

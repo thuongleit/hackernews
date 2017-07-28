@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dagger Sample</string>
+    <string name="app_name">Hacker News</string>
     <!-- Menu title strings -->
     <string name="title_new">New</string>
     <string name="title_best">Best</string>
