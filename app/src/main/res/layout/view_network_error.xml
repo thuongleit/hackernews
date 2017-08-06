@@ -14,7 +14,7 @@
         android:drawableTint="@android:color/darker_gray"
         android:drawableTop="@drawable/ic_no_internet_black_48dp"
         android:gravity="center"
-        android:text="No Internet"
+        android:text="@string/error_connection_lost_message"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/darker_gray" />
 
@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="4dp"
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
         android:paddingBottom="2dp"
