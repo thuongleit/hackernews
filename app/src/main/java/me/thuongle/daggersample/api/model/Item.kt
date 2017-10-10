@@ -1,6 +1,7 @@
 package me.thuongle.daggersample.api.model
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class Item(
         val id: Long,
