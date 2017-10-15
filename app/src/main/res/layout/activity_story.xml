@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="me.thuongle.daggersample.view.story.StoryActivity">
+    tools:context="me.thuongle.hknews.view.story.StoryActivity">
 
     <FrameLayout
         android:id="@+id/content"
