@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:drawablePadding="2dp"
     android:drawableTint="@android:color/darker_gray"
-    android:drawableTop="@drawable/ic_coffee_empty_black_48dp"
+    android:drawableTop="@drawable/ic_coffee"
     android:gravity="center"
     android:text="No Internet"
     android:textAppearance="?android:attr/textAppearanceSmall"

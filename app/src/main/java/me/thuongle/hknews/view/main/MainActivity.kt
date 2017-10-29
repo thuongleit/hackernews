@@ -42,20 +42,20 @@ class MainActivity : BaseActivity() {
 
                 if (isInStoryMode) {
                     isInStoryMode = false
-                    item.setIcon(R.drawable.ic_story_menu_white_24dp)
+                    item.setIcon(R.drawable.ic_story_menu)
                     navigation1.setIcon(R.drawable.ic_ask)
                     navigation1.setTitle(R.string.title_ask)
-                    navigation2.setIcon(R.drawable.ic_show_white_24dp)
+                    navigation2.setIcon(R.drawable.ic_show)
                     navigation2.setTitle(R.string.title_show)
-                    navigation3.setIcon(R.drawable.ic_job_white_24dp)
+                    navigation3.setIcon(R.drawable.ic_job)
                     navigation3.setTitle(R.string.title_job)
                 } else {
                     isInStoryMode = true
-                    item.setIcon(R.drawable.ic_show_presenter_white_24dp)
-                    navigation1.setIcon(R.drawable.ic_new_white_24dp)
-                    navigation1.setTitle(R.string.title_new)
-                    navigation2.setIcon(R.drawable.ic_top_white_24dp)
-                    navigation2.setTitle(R.string.title_top)
+                    item.setIcon(R.drawable.ic_show_presenter)
+                    navigation1.setIcon(R.drawable.ic_top)
+                    navigation1.setTitle(R.string.title_top)
+                    navigation2.setIcon(R.drawable.ic_new)
+                    navigation2.setTitle(R.string.title_new)
                     navigation3.setIcon(R.drawable.ic_best)
                     navigation3.setTitle(R.string.title_best)
                 }
@@ -67,13 +67,11 @@ class MainActivity : BaseActivity() {
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        val storyType: StoryType?
-
-        when (item.itemId) {
-            R.id.navigation_id_1 -> storyType = if (isInStoryMode) StoryType.NEW else StoryType.ASK
-            R.id.navigation_id_2 -> storyType = if (isInStoryMode) StoryType.TOP else StoryType.SHOW
-            R.id.navigation_id_3 -> storyType = if (isInStoryMode) StoryType.BEST else StoryType.JOB
-            else -> storyType = null
+        val storyType: StoryType? = when (item.itemId) {
+            R.id.navigation_id_1 -> if (isInStoryMode) StoryType.TOP else StoryType.ASK
+            R.id.navigation_id_2 -> if (isInStoryMode) StoryType.NEW else StoryType.SHOW
+            R.id.navigation_id_3 -> if (isInStoryMode) StoryType.BEST else StoryType.JOB
+            else -> null
         }
 
         if (storyType != null) {

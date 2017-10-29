@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:drawablePadding="2dp"
         android:drawableTint="@android:color/darker_gray"
-        android:drawableTop="@drawable/ic_no_internet_black_48dp"
+        android:drawableTop="@drawable/ic_no_internet"
         android:gravity="center"
         android:text="@string/error_connection_lost_message"
         android:textAppearance="?android:attr/textAppearanceSmall"

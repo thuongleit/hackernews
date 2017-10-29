@@ -42,12 +42,10 @@ class StoryActivity : BaseActivity() {
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        val fragment: Fragment?
-
-        when (item.itemId) {
-            R.id.navigation_content -> fragment = StoryContentFragment.newInstance(originUrl)
-            R.id.navigation_comments -> fragment = CommentFragment.newInstance(storyId)
-            else -> fragment = null
+        val fragment: Fragment? = when (item.itemId) {
+            R.id.navigation_content -> StoryContentFragment.newInstance(originUrl)
+            R.id.navigation_comments -> CommentFragment.newInstance(storyId)
+            else -> null
         }
 
         if (fragment != null) {

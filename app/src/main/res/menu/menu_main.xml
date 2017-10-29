@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_change_story"
-        android:icon="@drawable/ic_show_presenter_white_24dp"
+        android:icon="@drawable/ic_show_presenter"
         android:title="Change story"
         app:showAsAction="always" />
 
