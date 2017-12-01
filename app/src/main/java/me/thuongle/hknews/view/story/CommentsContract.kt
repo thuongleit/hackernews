@@ -1,6 +1,10 @@
 package me.thuongle.hknews.view.story
 
+import io.reactivex.Flowable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import me.thuongle.hknews.api.endpoint.Api
 import me.thuongle.hknews.view.base.BasePresenter
 import me.thuongle.hknews.view.base.NetworkView
@@ -18,6 +22,12 @@ internal class CommentsPresenterImpl(private val view: CommentsContract.View,
     private var disposable: Disposable? = null
 
     override fun subscribe() {
+        disposable = api.getItemDetailWith("$storyId")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { view. }
+                .doOnComplete { }
+                .subscribe { }
     }
 
     override fun unsubscribe() {
