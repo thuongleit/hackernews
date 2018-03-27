@@ -1,7 +1,5 @@
 package me.thuongle.hknews.view.story
 
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -25,7 +23,7 @@ internal class CommentsPresenterImpl(private val view: CommentsContract.View,
         disposable = api.getItemDetailWith("$storyId")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { view. }
+                //.doOnSubscribe { view. }
                 .doOnComplete { }
                 .subscribe { }
     }

@@ -29,7 +29,7 @@ class StoryContentFragment : BaseFragment(), StoryContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        contentUrl = arguments.getString(ARG_CONTENT_URL)
+        contentUrl = arguments?.getString(ARG_CONTENT_URL) ?: ""
 
         DaggerStoryComponent
                 .builder()
@@ -58,7 +58,7 @@ class StoryContentFragment : BaseFragment(), StoryContract.View {
         Log.d(TAG, "No Internet. ${t.message}")
         if (layoutNoInternetError == null) {
             layoutNoInternetError = LayoutInflater.from(context).inflate(R.layout.view_network_error, null)
-            layoutNoInternetError!!.findViewById(R.id.btn_retry).setOnClickListener {
+            (layoutNoInternetError!!.findViewById(R.id.btn_retry) as View).setOnClickListener {
                 presenter.subscribe()
             }
         }
@@ -67,7 +67,7 @@ class StoryContentFragment : BaseFragment(), StoryContract.View {
     }
 
     override fun showInAppError(t: Throwable) {
-        DialogFactory.createGenericErrorDialog(context).show()
+        DialogFactory.createGenericErrorDialog(context!!).show()
     }
 
     companion object {

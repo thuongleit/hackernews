@@ -3,6 +3,11 @@ package me.thuongle.hknews.api.model
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
+/**
+ * Immutable model class for an Item.
+ * An Item can be any kind of {@link Type} In order to compile with Room,
+ * use @JvmOverloads to generate multiple constructors.
+ */
 data class Item(
         val id: Long,
         val deleted: Boolean = false,

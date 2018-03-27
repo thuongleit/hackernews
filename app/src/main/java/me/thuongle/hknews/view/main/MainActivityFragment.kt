@@ -53,7 +53,7 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val type = arguments.getInt(ARG_NEWS_TYPE)
+        val type = arguments?.getInt(ARG_NEWS_TYPE) ?: 0
 
         DaggerMainComponent
                 .builder()
@@ -78,7 +78,7 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.setHasFixedSize(true)
 
-        adapter = ItemRecyclerViewAdapter(activity)
+        adapter = ItemRecyclerViewAdapter(context!!)
         recyclerView.adapter = adapter
 
         recyclerView.addOnScrollListener(onScrollListener)
@@ -94,14 +94,14 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
     }
 
     override fun onError(t: Throwable) {
-        DialogFactory.createGenericErrorDialog(context).show()
+        DialogFactory.createGenericErrorDialog(context!!).show()
     }
 
     override fun showNetworkError(t: Throwable) {
         Log.d(TAG, "No Internet. ${t.message}")
         if (layoutNoInternetError == null) {
             layoutNoInternetError = LayoutInflater.from(context).inflate(R.layout.view_network_error, null)
-            layoutNoInternetError!!.findViewById(R.id.btn_retry).setOnClickListener {
+            (layoutNoInternetError!!.findViewById(R.id.btn_retry) as View).setOnClickListener {
                 presenter.subscribe()
             }
         }
@@ -110,7 +110,7 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
     }
 
     override fun showInAppError(t: Throwable) {
-        DialogFactory.createGenericErrorDialog(context).show()
+        DialogFactory.createGenericErrorDialog(context!!).show()
     }
 
     override fun showProgress(show: Boolean) {
@@ -142,9 +142,10 @@ class MainActivityFragment : BaseFragment(), MainContract.View {
     }
 
     private class ItemRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<ItemRecyclerViewAdapter.StoryViewHolder>() {
+
         val data: MutableList<Item> = mutableListOf()
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): StoryViewHolder
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryViewHolder
                 = StoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout_story, parent, false))
 
         override fun onBindViewHolder(holderStory: StoryViewHolder, position: Int) {

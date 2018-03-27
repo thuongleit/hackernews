@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import java.util.*
 
-val BASE_URL = "https://hacker-news.firebaseio.com/v0/"
+const val BASE_URL = "https://hacker-news.firebaseio.com/v0/"
 
 interface Api {
 

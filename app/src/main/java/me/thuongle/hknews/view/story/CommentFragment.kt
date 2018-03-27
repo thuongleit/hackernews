@@ -27,7 +27,7 @@ class CommentFragment : BaseFragment(), CommentsContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val storyId = arguments.getLong(ARG_STORY_ID)
+        val storyId = arguments?.getLong(ARG_STORY_ID) ?: 0L
 
         DaggerCommentComponent
                 .builder()
@@ -54,7 +54,7 @@ class CommentFragment : BaseFragment(), CommentsContract.View {
         Log.d(TAG, "No Internet. ${t.message}")
         if (layoutNoInternetError == null) {
             layoutNoInternetError = LayoutInflater.from(context).inflate(R.layout.view_network_error, null)
-            layoutNoInternetError!!.findViewById(R.id.btn_retry).setOnClickListener {
+            (layoutNoInternetError!!.findViewById(R.id.btn_retry) as View).setOnClickListener {
                 presenter.subscribe()
             }
         }
@@ -63,7 +63,7 @@ class CommentFragment : BaseFragment(), CommentsContract.View {
     }
 
     override fun showInAppError(t: Throwable) {
-        DialogFactory.createGenericErrorDialog(context).show()
+        DialogFactory.createGenericErrorDialog(context!!).show()
     }
 
     companion object {
