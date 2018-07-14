@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <WebView
-        android:id="@+id/webview_content"
+    <data>
+
+        <variable
+            name="url"
+            type="String" />
+
+        <variable
+            name="loading"
+            type="Boolean" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <include
-        layout="@layout/item_layout_progress"
-        android:visibility="gone"/>
-</FrameLayout>
+        <WebView
+            android:id="@+id/wv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:url="@{url}"
+            app:visibility="@{!loading}" />
+
+        <me.thuongle.hknews.widget.PrimaryColorProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            app:visibility="@{loading}" />
+
+    </FrameLayout>
+</layout>

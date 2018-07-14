@@ -22,4 +22,7 @@
     <string name="error_login_facebook_failed">There was a problem logging Facebook. Please try again!</string>
     <string name="title_content">Content</string>
     <string name="title_comments">Comments</string>
+    <string name="retry">Retry</string>
+    <string name="minus_sign">-</string>
+    <string name="plus_sign">+</string>
 </resources>

@@ -10,11 +10,9 @@ import me.thuongle.hknews.R
 
 class PrimaryColorProgressBar : ProgressBar {
 
-    constructor(context: Context) : super(context) {
-        setupTintMode()
-    }
+    constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         setupTintMode()
     }
 

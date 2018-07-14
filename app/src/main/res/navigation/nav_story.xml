@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navStory"
+    app:startDestination="@id/contentFragment">
+
+    <fragment
+        android:id="@+id/contentFragment"
+        android:name="me.thuongle.hknews.view.story.ContentFragment"
+        android:label="ContentFragment"
+        tools:layout="@layout/fragment_story_content">
+        <argument
+            android:name="url"
+            app:type="string" />
+        <action
+            android:id="@+id/showContent"
+            app:destination="@id/contentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="me.thuongle.hknews.view.story.CommentsFragment"
+        android:label="CommentsFragment"
+        tools:layout="@layout/fragment_comment">
+        <argument
+            android:name="id"
+            app:type="string" />
+        <action
+            android:id="@+id/showComments"
+            app:destination="@id/commentsFragment" />
+    </fragment>
+</navigation>
