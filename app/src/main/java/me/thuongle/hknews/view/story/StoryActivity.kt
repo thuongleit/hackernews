@@ -76,6 +76,9 @@ class StoryActivity : AppCompatActivity(), HasSupportFragmentInjector {
         bottom_navigation.visibility = if (story.url.isNullOrBlank()) View.GONE else View.VISIBLE
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
     companion object {
         private const val EXTRA_ITEM = "hknews.extra.ITEM"
         private const val EXTRA_GO_TO_COMMENT_TAB = "hknews.extra.GO_TO_COMMENT_TAB"
