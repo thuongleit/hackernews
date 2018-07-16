@@ -1,6 +1,7 @@
 package me.thuongle.hknews.binding
 
 import android.databinding.BindingAdapter
+import android.text.Html
 import android.view.View
 import android.webkit.WebView
 import android.widget.TextView
@@ -10,6 +11,16 @@ object BindingAdapters {
     @BindingAdapter("visibility")
     fun setVisibility(view: View, show: Boolean) {
         view.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("fromHtml")
+    fun fromHtml(tv: TextView, text: String?) {
+        tv.text = if (text.isNullOrEmpty()) {
+            ""
+        } else {
+            Html.fromHtml(text?.trim())
+        }
     }
 
     @JvmStatic

@@ -25,4 +25,6 @@
     <string name="retry">Retry</string>
     <string name="minus_sign">-</string>
     <string name="plus_sign">+</string>
+    <string name="by">by</string>
+    <string name="ago">ago</string>
 </resources>

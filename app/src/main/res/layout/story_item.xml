@@ -19,8 +19,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:background="?attr/selectableItemBackground"
         android:onClick="@{(view) -> adapter.onItemClick.invoke(view, item)}">
 
@@ -45,8 +45,8 @@
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
             android:gravity="start"
             android:text="@{item.title}"
             android:textAppearance="?android:attr/textAppearanceSmall"
