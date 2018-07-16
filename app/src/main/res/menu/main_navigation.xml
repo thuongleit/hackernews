@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/itemFragment1"
-        android:icon="@drawable/ic_top"
-        android:title="@string/title_top" />
+        android:icon="@drawable/ic_new"
+        android:title="@string/title_new" />
 
     <item
         android:id="@+id/itemFragment2"
-        android:icon="@drawable/ic_new"
-        android:title="@string/title_new" />
+        android:icon="@drawable/ic_top"
+        android:title="@string/title_top" />
 
     <item
         android:id="@+id/itemFragment3"
