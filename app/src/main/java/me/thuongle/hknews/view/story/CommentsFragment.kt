@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import me.thuongle.hknews.R
 import me.thuongle.hknews.databinding.FragmentCommentBinding
 import me.thuongle.hknews.di.Injectable
+import me.thuongle.hknews.repository.LOADED
+import me.thuongle.hknews.repository.LOADING
 import me.thuongle.hknews.util.autoCleared
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
@@ -41,6 +43,14 @@ class CommentsFragment : Fragment(), Injectable {
         binding.recyclerView.adapter = adapter
         viewModel.comments.observe(this, Observer { comments ->
             adapter.submitList(comments)
+        })
+
+        viewModel.networkState.observe(this, Observer { networkState ->
+            binding.loading = when (networkState) {
+                is LOADED -> false
+                is LOADING -> true
+                else -> false
+            }
         })
     }
 
