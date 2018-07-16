@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -28,17 +29,15 @@ class StoryActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story)
 
-        val storyUrl = intent.getStringExtra(EXTRA_STORY_URL)
-                ?: throw IllegalArgumentException("Required argument \"storyUrl\" is missing")
-        val storyId = intent.getLongExtra(EXTRA_STORY_ID, 0)
-                ?: throw IllegalArgumentException("Required argument \"storyId\" is missing")
-        val navigationToComment = intent.getBooleanExtra(EXTRA_GO_TO_COMMENT, false)
+        val story = intent.getParcelableExtra<Item>(EXTRA_ITEM)
+                ?: throw IllegalArgumentException("Required argument \"item\" is missing")
+        title = story.title
 
         val navController = findNavController(R.id.nav_fragment)
         bottom_navigation.setupWithNavController(navController)
 
         //re-setup listener for our use
-        bottom_navigation.setOnNavigationItemSelectedListener { item ->
+        bottom_navigation.setOnNavigationItemSelectedListener { menuItem ->
             val builder = NavOptions.Builder()
                     .setLaunchSingleTop(true)
                     .setEnterAnim(androidx.navigation.ui.R.anim.nav_default_enter_anim)
@@ -49,16 +48,17 @@ class StoryActivity : AppCompatActivity(), HasSupportFragmentInjector {
             val options = builder.build()
             return@setOnNavigationItemSelectedListener try {
                 val (direction, args) =
-                        when (item.itemId) {
+                        when (menuItem.itemId) {
                             R.id.contentFragment -> {
                                 Pair(R.id.contentFragment,
-                                        bundleOf(ContentFragment.ARG_STORY_URL to storyUrl))
+                                        bundleOf(ContentFragment.ARG_STORY_URL to (story.url
+                                                ?: "")))
                             }
                             R.id.commentsFragment -> {
                                 Pair(R.id.commentsFragment,
-                                        bundleOf(CommentsFragment.ARG_STORY_ID to storyId.toString()))
+                                        bundleOf(CommentsFragment.ARG_STORY_ID to story.id.toString()))
                             }
-                            else -> throw IllegalArgumentException("This fragment doesn't contains menuItem Id ${item.itemId}")
+                            else -> throw IllegalArgumentException("This fragment doesn't contains menuItem Id ${menuItem.itemId}")
                         }
                 navController.navigate(direction, args, options)
                 true
@@ -67,21 +67,25 @@ class StoryActivity : AppCompatActivity(), HasSupportFragmentInjector {
             }
         }
 
-        bottom_navigation.selectedItemId = if (navigationToComment) R.id.commentsFragment else R.id.contentFragment
+        val navigationToComment = intent.getBooleanExtra(EXTRA_GO_TO_COMMENT_TAB, false)
+        bottom_navigation.selectedItemId = if (navigationToComment || story.url.isNullOrBlank()) {
+            R.id.commentsFragment
+        } else {
+            R.id.contentFragment
+        }
+        bottom_navigation.visibility = if (story.url.isNullOrBlank()) View.GONE else View.VISIBLE
     }
 
     companion object {
-        private const val EXTRA_STORY_ID = "hknews.extra.STORY_ID"
-        private const val EXTRA_STORY_URL = "hknews.extra.STORY_URL"
-        private const val EXTRA_GO_TO_COMMENT = "hknews.extra.GO_TO_COMMENT"
+        private const val EXTRA_ITEM = "hknews.extra.ITEM"
+        private const val EXTRA_GO_TO_COMMENT_TAB = "hknews.extra.GO_TO_COMMENT_TAB"
 
-        fun newInstance(context: Context, item: Item, goToComments: Boolean = false): Intent {
-            return Intent(context, StoryActivity::class.java)
-                    .apply {
-                        putExtra(EXTRA_STORY_ID, item.id)
-                        putExtra(EXTRA_STORY_URL, item.url)
-                        putExtra(EXTRA_GO_TO_COMMENT, goToComments)
-                    }
+        fun newInstance(context: Context, item: Item, goToCommentTab: Boolean = false): Intent {
+            val intent = Intent(context, StoryActivity::class.java)
+            intent.putExtra(EXTRA_ITEM, item)
+            intent.putExtra(EXTRA_GO_TO_COMMENT_TAB, goToCommentTab)
+
+            return intent
         }
     }
 }

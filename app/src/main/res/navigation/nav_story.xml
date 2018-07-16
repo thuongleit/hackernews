@@ -12,6 +12,7 @@
         tools:layout="@layout/fragment_story_content">
         <argument
             android:name="url"
+            android:defaultValue=" "
             app:type="string" />
         <action
             android:id="@+id/showContent"
