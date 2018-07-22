@@ -19,10 +19,10 @@ fun getBaseDomain(url: String?): String {
         startIndex = nextIndex + 1
         nextIndex = host.indexOf('.', startIndex)
     }
-    if (startIndex > 0) {
-        return host.substring(startIndex)
+    return if (startIndex > 0) {
+        host.substring(startIndex)
     } else {
-        return host
+        host
     }
 }
 
