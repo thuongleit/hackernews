@@ -50,6 +50,8 @@ versions.constraint_layout = "1.0.2"
 versions.glide = "4.7.1"
 versions.timber = "4.5.1"
 versions.android_gradle_plugin = '3.3.0-alpha03'
+versions.google_services = "4.0.1"
+versions.firebase = "16+"
 versions.rxjava2 = "2.1.9"
 versions.rx_android = "2.0.1"
 versions.rx_kotlin = "2.2.0"
@@ -177,6 +179,25 @@ debug.stetho_okhttp = "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"
 debug.leakcanary = "com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}"
 deps.debug = debug
 
+def firebase = [:]
+firebase.core = "com.google.firebase:firebase-core:${versions.firebase}"
+firebase.database = "com.google.firebase:firebase-database::${versions.firebase}"
+firebase.firestore = "com.google.firebase:firebase-firestore:${versions.firebase}"
+firebase.storage = "com.google.firebase:firebase-storage:${versions.firebase}"
+firebase.crash = "com.google.firebase:firebase-crash:${versions.firebase}"
+firebase.auth = "com.google.firebase:firebase-auth:${versions.firebase}"
+firebase.messaging = "com.google.firebase:firebase-messaging:${versions.firebase}"
+firebase.config = "com.google.firebase:firebase-config:${versions.firebase}"
+firebase.invites = "com.google.firebase:firebase-invites:${versions.firebase}"
+firebase.ads = "com.google.firebase:firebase-ads:${versions.firebase}"
+firebase.appindexing = "com.google.firebase:firebase-appindexing:${versions.firebase}"
+firebase.perf = "com.google.firebase:firebase-perf:${versions.firebase}"
+firebase.functions = "com.google.firebase:firebase-functions:${versions.firebase}"
+firebase.ml_vision = "com.google.firebase:firebase-ml-vision:${versions.firebase}"
+firebase.ml_model_interpreter = "com.google.firebase:firebase-ml-model-interpreter:${versions.firebase}"
+deps.firebase = firebase
+
+deps.google_services_plugin = "com.google.gms:google-services:${versions.google_services}"
 ext.deps = deps
 
 def addRepos(RepositoryHandler handler) {
