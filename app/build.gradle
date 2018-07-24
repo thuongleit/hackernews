@@ -50,22 +50,31 @@ dependencies {
     implementation deps.support.recyclerview
     implementation deps.support.cardview
     implementation deps.support.design
+    implementation deps.support.vector_drawable
+    implementation deps.constraint_layout
+
+    //Android Architecture Components
     implementation deps.navigation.fragment_ktx
     implementation deps.navigation.navigation_ui_ktx
     implementation deps.room.runtime
+    kapt deps.room.compiler
     implementation deps.paging
     implementation deps.lifecycle.runtime
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.java8
+    kapt deps.lifecycle.compiler
+
+    //others
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
     implementation deps.retrofit.rxjava2
-    implementation deps.glide.runtime
 
     implementation deps.dagger.runtime
     implementation deps.dagger.android
     implementation deps.dagger.android_support
-    implementation deps.constraint_layout
+    kapt deps.dagger.android_support_compiler
+    kapt deps.dagger.compiler
+
     implementation deps.kotlin.stdlib
 
     implementation deps.rx.core
@@ -75,14 +84,6 @@ dependencies {
     implementation deps.timber
     implementation deps.firebase.core
     implementation deps.crashlytics
-
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'com.android.support:support-vector-drawable:26.1.0'
-    kapt deps.dagger.android_support_compiler
-    kapt deps.dagger.compiler
-    kapt deps.room.compiler
-    kapt deps.lifecycle.compiler
 
     debugImplementation deps.debug.stetho
     debugImplementation deps.debug.stetho_okhttp
