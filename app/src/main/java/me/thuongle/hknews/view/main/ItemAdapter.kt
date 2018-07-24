@@ -1,7 +1,11 @@
 package me.thuongle.hknews.view.main
 
+import android.app.Activity
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
+import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +18,27 @@ import me.thuongle.hknews.repository.FAILED
 import me.thuongle.hknews.repository.LOADING
 import me.thuongle.hknews.view.common.NetworkDataBoundListAdapter
 import me.thuongle.hknews.view.story.StoryActivity
+import me.thuongle.hknews.view.story.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
 
-class ItemAdapter : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
+class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->
-        view.context.startActivity(StoryActivity.newInstance(view.context, item))
+        val intent = StoryActivity.newInstance(activity, item)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val sceneTransitionAnimation = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    activity,
+                    view.findViewById(R.id.tv_title),
+                    SHARED_VIEW_TOOLBAR_TITLE
+            )
+
+            ActivityCompat.startActivity(
+                    activity,
+                    intent,
+                    sceneTransitionAnimation.toBundle())
+        } else {
+            activity.startActivity(intent)
+        }
     }
 
     override fun createItemBinding(parent: ViewGroup): StoryItemBinding {

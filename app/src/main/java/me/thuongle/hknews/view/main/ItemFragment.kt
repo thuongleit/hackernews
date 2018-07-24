@@ -36,7 +36,7 @@ class ItemFragment : Fragment(), Injectable {
 
         viewModel.showStory(StoryType.valueOf(storyType))
 
-        val adapter = ItemAdapter()
+        val adapter = ItemAdapter(activity!!)
         this.adapter = adapter
         binding.recyclerView.adapter = adapter
         viewModel.stories.observe(this, Observer { stories ->

@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -32,6 +35,15 @@ class StoryActivity : AppCompatActivity(), HasSupportFragmentInjector {
         val story = intent.getParcelableExtra<Item>(EXTRA_ITEM)
                 ?: throw IllegalArgumentException("Required argument \"item\" is missing")
         title = story.title
+
+        try {
+            //start enter activity transaction on toolbar title
+            val actionbar = findViewById<Toolbar>(R.id.action_bar)
+            val tvTitle = actionbar.getChildAt(0)
+            ViewCompat.setTransitionName(tvTitle, SHARED_VIEW_TOOLBAR_TITLE)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message)
+        }
 
         val navController = findNavController(R.id.nav_fragment)
         bottom_navigation.setupWithNavController(navController)
@@ -80,6 +92,9 @@ class StoryActivity : AppCompatActivity(), HasSupportFragmentInjector {
         finish()
     }
     companion object {
+        private const val TAG = "StoryActivity"
+        const val SHARED_VIEW_TOOLBAR_TITLE = "toolbar:title"
+
         private const val EXTRA_ITEM = "hknews.extra.ITEM"
         private const val EXTRA_GO_TO_COMMENT_TAB = "hknews.extra.GO_TO_COMMENT_TAB"
 
