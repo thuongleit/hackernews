@@ -50,7 +50,9 @@ versions.constraint_layout = "1.0.2"
 versions.glide = "4.7.1"
 versions.timber = "4.5.1"
 versions.android_gradle_plugin = '3.3.0-alpha03'
-versions.google_services = "4.0.1"
+versions.google_services = "4.0.2"
+versions.fabric_plugin = "1.25.4"
+versions.crashlytics = "2.9.4"
 versions.firebase = "16+"
 versions.rxjava2 = "2.1.9"
 versions.rx_android = "2.0.1"
@@ -198,11 +200,15 @@ firebase.ml_model_interpreter = "com.google.firebase:firebase-ml-model-interpret
 deps.firebase = firebase
 
 deps.google_services_plugin = "com.google.gms:google-services:${versions.google_services}"
+deps.fabric_plugin = "io.fabric.tools:gradle:${versions.fabric_plugin}"
+deps.crashlytics = "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}"
+
 ext.deps = deps
 
 def addRepos(RepositoryHandler handler) {
     handler.google()
     handler.jcenter()
     handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    handler.maven { url 'https://maven.fabric.io/public' }
 }
 ext.addRepos = this.&addRepos
