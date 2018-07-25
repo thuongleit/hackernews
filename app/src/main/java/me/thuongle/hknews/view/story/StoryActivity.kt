@@ -17,7 +17,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_story.*
 import me.thuongle.hknews.R
-import me.thuongle.hknews.api.Item
+import me.thuongle.hknews.vo.Item
 import me.thuongle.hknews.util.bundleOf
 import java.lang.IllegalArgumentException
 import javax.inject.Inject

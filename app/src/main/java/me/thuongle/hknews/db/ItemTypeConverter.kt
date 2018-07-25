@@ -1,7 +1,7 @@
 package me.thuongle.hknews.db
 
 import android.arch.persistence.room.TypeConverter
-import me.thuongle.hknews.api.ItemType
+import me.thuongle.hknews.vo.ItemType
 
 object ItemTypeConverter {
 

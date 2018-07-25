@@ -1,6 +1,8 @@
 package me.thuongle.hknews.api
 
 import io.reactivex.Single
+import me.thuongle.hknews.vo.Item
+import me.thuongle.hknews.vo.StoryType
 import retrofit2.http.GET
 import retrofit2.http.Path
 

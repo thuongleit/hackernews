@@ -2,7 +2,7 @@ package me.thuongle.hknews.db
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
-import me.thuongle.hknews.api.Item
+import me.thuongle.hknews.vo.Item
 
 @Database(
         entities = [

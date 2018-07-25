@@ -5,8 +5,8 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import me.thuongle.hknews.SchedulerProvider
 import me.thuongle.hknews.api.ApiService
-import me.thuongle.hknews.api.Item
-import me.thuongle.hknews.api.StoryType
+import me.thuongle.hknews.vo.Item
+import me.thuongle.hknews.vo.StoryType
 import javax.inject.Inject
 
 class ItemRepository @Inject constructor(

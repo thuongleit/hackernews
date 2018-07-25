@@ -3,7 +3,7 @@ package me.thuongle.hknews.repository
 import io.reactivex.Single
 import me.thuongle.hknews.SchedulerProvider
 import me.thuongle.hknews.api.ApiService
-import me.thuongle.hknews.api.StoryType
+import me.thuongle.hknews.vo.StoryType
 import me.thuongle.hknews.api.path
 
 class StoryItemKeyedDataSource(

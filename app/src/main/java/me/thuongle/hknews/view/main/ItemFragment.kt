@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.thuongle.hknews.R
-import me.thuongle.hknews.api.StoryType
+import me.thuongle.hknews.vo.StoryType
 import me.thuongle.hknews.databinding.FragmentItemBinding
 import me.thuongle.hknews.di.Injectable
 import me.thuongle.hknews.util.autoCleared

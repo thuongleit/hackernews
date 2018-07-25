@@ -1,4 +1,4 @@
-package me.thuongle.hknews.api
+package me.thuongle.hknews.vo
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

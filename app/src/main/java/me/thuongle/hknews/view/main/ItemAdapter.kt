@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.thuongle.hknews.R
-import me.thuongle.hknews.api.Item
+import me.thuongle.hknews.vo.Item
 import me.thuongle.hknews.databinding.NetworkStateItemBinding
 import me.thuongle.hknews.databinding.StoryItemBinding
 import me.thuongle.hknews.repository.FAILED

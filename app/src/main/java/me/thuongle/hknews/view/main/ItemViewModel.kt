@@ -6,8 +6,8 @@ import android.arch.lifecycle.Transformations.map
 import android.arch.lifecycle.Transformations.switchMap
 import android.arch.lifecycle.ViewModel
 import android.arch.paging.PagedList
-import me.thuongle.hknews.api.Item
-import me.thuongle.hknews.api.StoryType
+import me.thuongle.hknews.vo.Item
+import me.thuongle.hknews.vo.StoryType
 import me.thuongle.hknews.repository.ItemRepository
 import me.thuongle.hknews.repository.NetworkState
 import javax.inject.Inject

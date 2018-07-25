@@ -7,7 +7,7 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.zipWith
 import me.thuongle.hknews.SchedulerProvider
 import me.thuongle.hknews.api.ApiService
-import me.thuongle.hknews.api.Item
+import me.thuongle.hknews.vo.Item
 
 abstract class ItemKeyedDataSource(
         protected val api: ApiService,

@@ -3,7 +3,7 @@ package me.thuongle.hknews.db
 import android.arch.lifecycle.LiveData
 import android.arch.paging.PagedList
 import android.arch.persistence.room.*
-import me.thuongle.hknews.api.Item
+import me.thuongle.hknews.vo.Item
 
 @Dao
 interface ItemDao {
