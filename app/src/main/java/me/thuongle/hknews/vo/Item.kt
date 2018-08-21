@@ -3,12 +3,9 @@ package me.thuongle.hknews.vo
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Index
-import android.arch.persistence.room.TypeConverters
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import me.thuongle.hknews.db.ItemKidsConverter
-import me.thuongle.hknews.db.ItemTypeConverter
 import me.thuongle.hknews.util.getBaseDomain
 import java.util.*
 
@@ -25,7 +22,6 @@ enum class ItemType {
         indices = [
             Index("id")]
 )
-@TypeConverters(ItemKidsConverter::class, ItemTypeConverter::class)
 data class Item(
         val id: Long,
         val deleted: Boolean = false,

@@ -20,6 +20,7 @@ abstract class DataBoundListAdapter<T, V : ViewDataBinding>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> =
             DataBoundViewHolder(createItemBinding(parent))
 
+    @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: DataBoundViewHolder<*>, position: Int) {
         getItem(position)?.let { bindItem(holder.binding as V, it) }
         holder.binding.executePendingBindings()

@@ -19,6 +19,7 @@ abstract class ExpendableDataBoundListAdapter<T, P : ViewDataBinding, C : ViewDa
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: DataBoundViewHolder<*>, position: Int) {
         when (getItemViewType(position)) {
             PARENT_TYPE -> getItem(position)?.let { bindParentItem(holder.binding as P, it) }
