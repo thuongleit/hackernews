@@ -1,6 +1,7 @@
 package me.thuongle.hknews.di
 
 import android.arch.lifecycle.ViewModel
+import androidx.work.Worker
 import dagger.MapKey
 import javax.inject.Qualifier
 import kotlin.reflect.KClass
@@ -14,6 +15,11 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey
 annotation class ViewModelKey(val value: KClass<out ViewModel>)
+
+@MapKey
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+annotation class WorkerKey(val value: KClass<out Worker>)
 
 @Qualifier
 @MustBeDocumented

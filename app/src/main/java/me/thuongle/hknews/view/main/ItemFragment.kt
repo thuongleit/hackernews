@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.thuongle.hknews.R
-import me.thuongle.hknews.vo.StoryType
+import me.thuongle.hknews.data.vo.Item
 import me.thuongle.hknews.databinding.FragmentItemBinding
 import me.thuongle.hknews.di.Injectable
 import me.thuongle.hknews.util.autoCleared
@@ -34,16 +34,13 @@ class ItemFragment : Fragment(), Injectable {
         val storyType = arguments?.getString(ARG_TYPE)
                 ?: throw IllegalArgumentException("Required argument \"type\" is missing and does not have an android:defaultValue")
 
-        viewModel.showStory(StoryType.valueOf(storyType))
+        viewModel.showStory(Item.StoryType.valueOf(storyType))
 
         val adapter = ItemAdapter(activity!!)
         this.adapter = adapter
         binding.recyclerView.adapter = adapter
         viewModel.stories.observe(this, Observer { stories ->
             adapter.submitList(stories)
-        })
-        viewModel.networkState.observe(this, Observer { networkState ->
-            adapter.setState(networkState)
         })
     }
 

@@ -3,18 +3,25 @@ package me.thuongle.hknews
 import android.app.Activity
 import android.app.Application
 import android.util.Log
+import androidx.work.Worker
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import io.fabric.sdk.android.Fabric
 import me.thuongle.hknews.di.AppInjector
+import me.thuongle.hknews.di.HasWorkerInjector
 import timber.log.Timber
 import javax.inject.Inject
 
-open class App : Application(), HasActivityInjector {
+open class App : Application(), HasActivityInjector, HasWorkerInjector {
+
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+
+    @Inject
+    lateinit var workerInjector: DispatchingAndroidInjector<Worker>
 
     override fun onCreate() {
         super.onCreate()
@@ -22,7 +29,7 @@ open class App : Application(), HasActivityInjector {
         val crashlytics = CrashlyticsCore.Builder()
                 .disabled(BuildConfig.DEBUG)
                 .build()
-        Fabric.with(this,  Crashlytics.Builder().core(crashlytics).build())
+        Fabric.with(this, Crashlytics.Builder().core(crashlytics).build())
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -33,6 +40,8 @@ open class App : Application(), HasActivityInjector {
     }
 
     override fun activityInjector() = dispatchingAndroidInjector
+
+    override fun workerInjector(): AndroidInjector<Worker> = workerInjector
 
     inner class CrashlyticsTree : Timber.Tree() {
         private val KEY_PRIORITY = "priority"

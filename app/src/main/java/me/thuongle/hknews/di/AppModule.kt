@@ -1,13 +1,13 @@
 package me.thuongle.hknews.di
 
+import android.app.Application
 import android.arch.persistence.room.Room
 import dagger.Module
 import dagger.Provides
-import me.thuongle.hknews.App
 import me.thuongle.hknews.AppSchedulerProvider
 import me.thuongle.hknews.SchedulerProvider
-import me.thuongle.hknews.db.HackerNewsDb
-import me.thuongle.hknews.db.ItemDao
+import me.thuongle.hknews.data.db.HackerNewsDb
+import me.thuongle.hknews.data.db.ItemDao
 import javax.inject.Singleton
 
 @Module
@@ -19,9 +19,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun profileDatabase(app: App): HackerNewsDb {
+    fun profileDatabase(application: Application): HackerNewsDb {
         return Room
-                .databaseBuilder(app, HackerNewsDb::class.java, "hknews.db")
+                .databaseBuilder(application, HackerNewsDb::class.java, "hknews.db")
                 .fallbackToDestructiveMigration()
                 .build()
     }

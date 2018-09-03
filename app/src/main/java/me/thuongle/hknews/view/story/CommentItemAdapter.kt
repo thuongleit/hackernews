@@ -3,7 +3,7 @@ package me.thuongle.hknews.view.story
 import android.support.v7.util.DiffUtil
 import android.view.ViewGroup
 import me.thuongle.hknews.R
-import me.thuongle.hknews.vo.Item
+import me.thuongle.hknews.data.vo.Item
 import me.thuongle.hknews.databinding.CommentChildItemBinding
 import me.thuongle.hknews.databinding.CommentParentItemBinding
 import me.thuongle.hknews.view.common.ExpendableDataBoundListAdapter

@@ -11,20 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.thuongle.hknews.R
-import me.thuongle.hknews.vo.Item
-import me.thuongle.hknews.databinding.NetworkStateItemBinding
+import me.thuongle.hknews.data.vo.Item
 import me.thuongle.hknews.databinding.StoryItemBinding
-import me.thuongle.hknews.repository.FAILED
-import me.thuongle.hknews.repository.LOADING
-import me.thuongle.hknews.view.common.NetworkDataBoundListAdapter
+import me.thuongle.hknews.view.common.DataBoundListAdapter
 import me.thuongle.hknews.view.story.StoryActivity
 import me.thuongle.hknews.view.story.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
 
-class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
+class ItemAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->
-        val intent = StoryActivity.newInstance(activity, item)
+        val intent = StoryActivity.newInstance(activity, item.id)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val sceneTransitionAnimation = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     activity,
@@ -45,23 +42,9 @@ class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<
         return createBinding(parent, R.layout.story_item) as StoryItemBinding
     }
 
-    override fun createNetworkBinding(parent: ViewGroup): NetworkStateItemBinding {
-        return createBinding(parent, R.layout.network_state_item) as NetworkStateItemBinding
-    }
-
     override fun bindItem(binding: StoryItemBinding, item: Item) {
         binding.item = item
         binding.adapter = this
-    }
-
-    override fun bindNetworkState(binding: NetworkStateItemBinding) {
-        when (networkState) {
-            is LOADING -> binding.loading = true
-            is FAILED -> {
-                binding.failed = true
-                binding.message = (networkState as FAILED).msg
-            }
-        }
     }
 
     private fun createBinding(parent: ViewGroup, layoutId: Int): ViewDataBinding {

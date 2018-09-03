@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="me.thuongle.hknews.vo.Item" />
+            type="me.thuongle.hknews.data.vo.Item" />
 
         <import type="me.thuongle.hknews.util.DateTimeUtilKt" />
 

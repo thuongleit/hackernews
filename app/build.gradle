@@ -7,7 +7,6 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion build_versions.target_sdk
-    buildToolsVersion build_versions.build_tools
 
     defaultConfig {
         applicationId "me.thuongle.hknews"
@@ -63,6 +62,8 @@ dependencies {
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.java8
     kapt deps.lifecycle.compiler
+
+    implementation deps.work.runtime_ktx
 
     //others
     implementation deps.retrofit.runtime

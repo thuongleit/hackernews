@@ -1,8 +1,8 @@
-package me.thuongle.hknews.db
+package me.thuongle.hknews.data.db
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
-import me.thuongle.hknews.vo.Item
+import me.thuongle.hknews.data.vo.Item
 
 @Database(
         entities = [
