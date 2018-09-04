@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "620587495469",
-    "firebase_url": "https://hackernews-thuong.firebaseio.com",
-    "project_id": "hackernews-thuong",
-    "storage_bucket": "hackernews-thuong.appspot.com"
+    "project_number": "637173880790",
+    "firebase_url": "https://hknews-vifi.firebaseio.com",
+    "project_id": "hknews-vifi",
+    "storage_bucket": "hknews-vifi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:620587495469:android:5a6059a0dd2f7332",
+        "mobilesdk_app_id": "1:637173880790:android:29945866e48cbcf9",
         "android_client_info": {
-          "package_name": "me.thuongle.hknews"
+          "package_name": "studio.vifi.hknews"
         }
       },
       "oauth_client": [
         {
-          "client_id": "620587495469-f5v1f2b788sufannhhjse8mp3d2agtql.apps.googleusercontent.com",
+          "client_id": "637173880790-jdsru2vuh5m4pqmean72b6uampecgk25.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAuVHvlN41jK0VPQXPIZxCpvBYoWWeuw3Y"
+          "current_key": "AIzaSyDt1J7VxnPca_UjFrqKOv0-OW9M424yQhA"
         }
       ],
       "services": {

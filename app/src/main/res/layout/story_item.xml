@@ -6,13 +6,13 @@
 
         <variable
             name="adapter"
-            type="me.thuongle.hknews.view.main.StoryAdapter" />
+            type="studio.vifi.hknews.view.main.StoryAdapter" />
 
         <variable
             name="item"
-            type="me.thuongle.hknews.data.vo.Item" />
+            type="studio.vifi.hknews.data.vo.Item" />
 
-        <import type="me.thuongle.hknews.util.DateTimeUtilKt" />
+        <import type="studio.vifi.hknews.util.DateTimeUtilKt" />
 
     </data>
 
@@ -24,7 +24,7 @@
         android:background="?attr/selectableItemBackground"
         android:onClick="@{(view) -> adapter.onItemClick.invoke(view, item)}">
 
-        <me.thuongle.hknews.widget.VectorAppCompatTextView
+        <studio.vifi.hknews.widget.VectorAppCompatTextView
             android:id="@+id/tv_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             app:layout_constraintStart_toEndOf="@+id/tv_up"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-        <me.thuongle.hknews.widget.VectorAppCompatTextView
+        <studio.vifi.hknews.widget.VectorAppCompatTextView
             android:id="@+id/tv_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
