@@ -10,7 +10,7 @@ import studio.vifi.hknews.data.db.converter.KidsConverter
 import studio.vifi.hknews.data.db.converter.StoryTypeConverter
 import studio.vifi.hknews.util.getBaseDomain
 
-@Entity(tableName = "stories",
+@Entity(tableName = "items",
         primaryKeys = ["id"],
         indices = [
             Index("id")]
@@ -36,7 +36,8 @@ data class Item(
         val score: Int = 0,
         val title: String,
         val parts: List<Long>? = null,
-        val descendants: Int = 0
+        val descendants: Int = 0,
+        val bookmarked: Boolean = false
 ) {
     val description: String
         get() {

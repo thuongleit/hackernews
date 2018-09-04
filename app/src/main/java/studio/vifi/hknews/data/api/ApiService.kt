@@ -10,7 +10,7 @@ const val BASE_URL = "https://hacker-news.firebaseio.com/v0/"
 interface ApiService {
 
     @GET("{path}")
-    fun getStories(@Path("path") path: String): Call<List<Long>>
+    fun getItems(@Path("path") path: String): Call<List<Long>>
 
     @GET("item/{id}.json")
     fun getItemDetail(@Path("id") id: Long): Call<Item>

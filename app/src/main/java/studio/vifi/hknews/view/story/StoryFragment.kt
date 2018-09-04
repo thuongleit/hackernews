@@ -40,10 +40,10 @@ class StoryFragment : Fragment(), Injectable {
         this.adapter = adapter
         binding.rvStories.adapter = adapter
         viewModel.liveStories.observe(this, Observer { stories ->
+            adapter.submitList(stories)
             if (stories != null && stories.isNotEmpty()) {
                 this.binding.loading = false
             }
-            adapter.submitList(stories)
         })
     }
 
