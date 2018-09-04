@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/contentFragment"
-        android:name="studio.vifi.hknews.view.story.ContentFragment"
+        android:name="studio.vifi.hknews.view.item.ContentFragment"
         android:label="ContentFragment"
         tools:layout="@layout/fragment_story_content">
         <argument
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
-        android:name="studio.vifi.hknews.view.story.CommentsFragment"
+        android:name="studio.vifi.hknews.view.item.CommentsFragment"
         android:label="CommentsFragment"
         tools:layout="@layout/fragment_comment">
         <argument

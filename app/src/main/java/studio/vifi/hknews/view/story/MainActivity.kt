@@ -1,4 +1,4 @@
-package studio.vifi.hknews.view.main
+package studio.vifi.hknews.view.story
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

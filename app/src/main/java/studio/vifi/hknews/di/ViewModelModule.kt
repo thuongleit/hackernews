@@ -6,8 +6,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import studio.vifi.hknews.view.ViewModelFactory
-import studio.vifi.hknews.view.main.StoryViewModel
-import studio.vifi.hknews.view.story.ItemCommentViewModel
+import studio.vifi.hknews.view.story.StoryViewModel
+import studio.vifi.hknews.view.item.ItemCommentViewModel
 
 @Module
 abstract class ViewModelModule {

@@ -1,4 +1,4 @@
-package studio.vifi.hknews.view.main
+package studio.vifi.hknews.view.story
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData

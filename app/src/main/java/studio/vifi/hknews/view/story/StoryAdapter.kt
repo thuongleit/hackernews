@@ -1,4 +1,4 @@
-package studio.vifi.hknews.view.main
+package studio.vifi.hknews.view.story
 
 import android.app.Activity
 import android.databinding.DataBindingUtil
@@ -14,8 +14,8 @@ import studio.vifi.hknews.R
 import studio.vifi.hknews.data.vo.Item
 import studio.vifi.hknews.databinding.StoryItemBinding
 import studio.vifi.hknews.view.common.DataBoundListAdapter
-import studio.vifi.hknews.view.story.StoryActivity
-import studio.vifi.hknews.view.story.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
+import studio.vifi.hknews.view.item.StoryActivity
+import studio.vifi.hknews.view.item.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
 
 class StoryAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
         DIFF_CALLBACK

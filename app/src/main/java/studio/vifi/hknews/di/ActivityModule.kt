@@ -2,8 +2,8 @@ package studio.vifi.hknews.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import studio.vifi.hknews.view.main.MainActivity
-import studio.vifi.hknews.view.story.StoryActivity
+import studio.vifi.hknews.view.story.MainActivity
+import studio.vifi.hknews.view.item.StoryActivity
 
 
 @Module(includes = [ViewModelModule::class])

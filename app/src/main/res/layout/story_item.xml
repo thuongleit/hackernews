@@ -6,7 +6,7 @@
 
         <variable
             name="adapter"
-            type="studio.vifi.hknews.view.main.StoryAdapter" />
+            type="studio.vifi.hknews.view.story.StoryAdapter" />
 
         <variable
             name="item"

@@ -1,4 +1,4 @@
-package studio.vifi.hknews.view.story
+package studio.vifi.hknews.view.item
 
 import android.support.v7.util.DiffUtil
 import android.view.ViewGroup

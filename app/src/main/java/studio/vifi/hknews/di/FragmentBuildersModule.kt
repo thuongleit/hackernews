@@ -2,9 +2,9 @@ package studio.vifi.hknews.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import studio.vifi.hknews.view.main.StoryFragment
-import studio.vifi.hknews.view.story.CommentsFragment
-import studio.vifi.hknews.view.story.ContentFragment
+import studio.vifi.hknews.view.story.StoryFragment
+import studio.vifi.hknews.view.item.CommentsFragment
+import studio.vifi.hknews.view.item.ContentFragment
 
 @Module
 abstract class FragmentBuildersModule {

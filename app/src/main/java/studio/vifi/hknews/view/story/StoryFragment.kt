@@ -10,55 +10,52 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import studio.vifi.hknews.R
-import studio.vifi.hknews.databinding.FragmentCommentBinding
+import studio.vifi.hknews.data.vo.Item
+import studio.vifi.hknews.databinding.FragmentStoryBinding
 import studio.vifi.hknews.di.Injectable
 import studio.vifi.hknews.util.autoCleared
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-class CommentsFragment : Fragment(), Injectable {
+class StoryFragment : Fragment(), Injectable {
 
-    private lateinit var viewModel: ItemCommentViewModel
+    private lateinit var viewModel: StoryViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private var binding by autoCleared<FragmentCommentBinding>()
-    private var adapter by autoCleared<CommentItemAdapter>()
+    var binding by autoCleared<FragmentStoryBinding>()
+    var adapter by autoCleared<StoryAdapter>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ItemCommentViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(StoryViewModel::class.java)
 
-        val storyId = CommentsFragmentArgs.fromBundle(arguments).id
-                ?: throw IllegalArgumentException("Required argument \"id\" is missing and does not have an android:defaultValue")
+        val storyType = arguments?.getString(ARG_TYPE)
+                ?: throw IllegalArgumentException("Required argument \"type\" is missing and does not have an android:defaultValue")
 
-        viewModel.setId(storyId.toLong())
+        viewModel.loadStories(Item.StoryType.valueOf(storyType))
 
-        val adapter = CommentItemAdapter().also {
-            this.adapter = it
-        }
+        val adapter = StoryAdapter(activity!!)
+        this.adapter = adapter
         binding.recyclerView.adapter = adapter
-        viewModel.comments.observe(this, Observer { comments ->
-            adapter.submitList(comments)
+        viewModel.stories.observe(this, Observer { stories ->
+            adapter.submitList(stories)
         })
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val binding = DataBindingUtil.inflate<FragmentCommentBinding>(
+        val binding = DataBindingUtil.inflate<FragmentStoryBinding>(
                 inflater,
-                R.layout.fragment_comment,
+                R.layout.fragment_story,
                 container,
-                false
-        )
+                false)
         this.binding = binding
         return binding.root
     }
 
     companion object {
-        private const val TAG = "CommentsFragment"
-        const val ARG_STORY_ID = "id"
+        const val ARG_TYPE = "type"
     }
 }
