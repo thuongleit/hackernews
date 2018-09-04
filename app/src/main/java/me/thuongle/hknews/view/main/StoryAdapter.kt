@@ -17,7 +17,7 @@ import me.thuongle.hknews.view.common.DataBoundListAdapter
 import me.thuongle.hknews.view.story.StoryActivity
 import me.thuongle.hknews.view.story.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
 
-class ItemAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
+class StoryAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->

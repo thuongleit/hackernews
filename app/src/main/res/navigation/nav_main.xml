@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/itemFragment1"
-        android:name="me.thuongle.hknews.view.main.ItemFragment"
-        tools:layout="@layout/fragment_item">
+        android:name="me.thuongle.hknews.view.main.StoryFragment"
+        tools:layout="@layout/fragment_story">
         <argument
             android:name="type"
             android:defaultValue="NEW"
@@ -16,8 +16,8 @@
     </fragment>
     <fragment
         android:id="@+id/itemFragment2"
-        android:name="me.thuongle.hknews.view.main.ItemFragment"
-        tools:layout="@layout/fragment_item">
+        android:name="me.thuongle.hknews.view.main.StoryFragment"
+        tools:layout="@layout/fragment_story">
         <argument
             android:name="type"
             android:defaultValue="TOP"
@@ -25,8 +25,8 @@
     </fragment>
     <fragment
         android:id="@+id/itemFragment3"
-        android:name="me.thuongle.hknews.view.main.ItemFragment"
-        tools:layout="@layout/fragment_item">
+        android:name="me.thuongle.hknews.view.main.StoryFragment"
+        tools:layout="@layout/fragment_story">
         <argument
             android:name="type"
             android:defaultValue="BEST"

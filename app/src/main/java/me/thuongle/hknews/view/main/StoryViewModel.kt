@@ -9,7 +9,7 @@ import me.thuongle.hknews.data.repository.ItemRepository
 import me.thuongle.hknews.data.vo.Item
 import javax.inject.Inject
 
-class ItemViewModel @Inject constructor(itemRepository: ItemRepository) : ViewModel() {
+class StoryViewModel @Inject constructor(itemRepository: ItemRepository) : ViewModel() {
 
     private val storyType: MutableLiveData<Item.StoryType> = MutableLiveData()
 
@@ -17,7 +17,7 @@ class ItemViewModel @Inject constructor(itemRepository: ItemRepository) : ViewMo
         itemRepository.fetchStories(type = it)
     }
 
-    fun showStory(type: Item.StoryType): Boolean {
+    fun loadStories(type: Item.StoryType): Boolean {
         if (storyType.value == type) {
             return false
         }

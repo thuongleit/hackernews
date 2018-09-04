@@ -17,26 +17,26 @@ import me.thuongle.hknews.util.autoCleared
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-class ItemFragment : Fragment(), Injectable {
+class StoryFragment : Fragment(), Injectable {
 
-    private lateinit var viewModel: ItemViewModel
+    private lateinit var viewModel: StoryViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     var binding by autoCleared<FragmentItemBinding>()
-    var adapter by autoCleared<ItemAdapter>()
+    var adapter by autoCleared<StoryAdapter>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ItemViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(StoryViewModel::class.java)
 
         val storyType = arguments?.getString(ARG_TYPE)
                 ?: throw IllegalArgumentException("Required argument \"type\" is missing and does not have an android:defaultValue")
 
-        viewModel.showStory(Item.StoryType.valueOf(storyType))
+        viewModel.loadStories(Item.StoryType.valueOf(storyType))
 
-        val adapter = ItemAdapter(activity!!)
+        val adapter = StoryAdapter(activity!!)
         this.adapter = adapter
         binding.recyclerView.adapter = adapter
         viewModel.stories.observe(this, Observer { stories ->
@@ -48,7 +48,7 @@ class ItemFragment : Fragment(), Injectable {
                               savedInstanceState: Bundle?): View {
         val binding = DataBindingUtil.inflate<FragmentItemBinding>(
                 inflater,
-                R.layout.fragment_item,
+                R.layout.fragment_story,
                 container,
                 false)
         this.binding = binding

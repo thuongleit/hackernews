@@ -6,7 +6,7 @@
 
         <variable
             name="adapter"
-            type="me.thuongle.hknews.view.main.ItemAdapter" />
+            type="me.thuongle.hknews.view.main.StoryAdapter" />
 
         <variable
             name="item"
