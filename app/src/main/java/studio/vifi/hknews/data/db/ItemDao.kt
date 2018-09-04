@@ -17,16 +17,16 @@ abstract class ItemDao {
     @Delete
     abstract fun delete(vararg items: Item)
 
-    @Query("SELECT * FROM stories")
+    @Query("SELECT * FROM stories ORDER BY time DESC")
     abstract fun loadAll(): DataSource.Factory<Int, Item>
 
     @Query("SELECT * FROM stories WHERE id = :id")
     abstract fun loadById(id: Long): LiveData<Item>
 
-    @Query("SELECT * FROM stories WHERE id IN (:ids)")
+    @Query("SELECT * FROM stories WHERE id IN (:ids) ORDER BY time DESC")
     abstract fun loadByIds(vararg ids: Long): DataSource.Factory<Int, Item>
 
-    @Query("SELECT * FROM stories WHERE story_type = :typeOrdinal")
+    @Query("SELECT * FROM stories WHERE story_type = :typeOrdinal ORDER BY time DESC")
     abstract fun loadByType(typeOrdinal: Int): DataSource.Factory<Int, Item>
 
     @Query("SELECT EXISTS (SELECT id FROM stories WHERE id = :itemId)")

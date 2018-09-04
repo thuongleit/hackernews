@@ -11,17 +11,17 @@ import javax.inject.Inject
 
 class StoryViewModel @Inject constructor(itemRepository: ItemRepository) : ViewModel() {
 
-    private val storyType: MutableLiveData<Item.StoryType> = MutableLiveData()
+    private val liveStoryType: MutableLiveData<Item.StoryType> = MutableLiveData()
 
-    val stories: LiveData<PagedList<Item>> = switchMap(storyType) {
+    val liveStories: LiveData<PagedList<Item>> = switchMap(liveStoryType) {
         itemRepository.fetchStories(type = it)
     }
 
     fun loadStories(type: Item.StoryType): Boolean {
-        if (storyType.value == type) {
+        if (liveStoryType.value == type) {
             return false
         }
-        storyType.value = type
+        liveStoryType.value = type
         return true
     }
 }

@@ -9,7 +9,9 @@ import android.widget.TextView
 object BindingAdapters {
     @JvmStatic
     @BindingAdapter("visibility")
-    fun setVisibility(view: View, show: Boolean) {
+    fun setVisibility(view: View, show: Boolean?) {
+        if (show == null) return
+
         view.visibility = if (show) View.VISIBLE else View.GONE
     }
 

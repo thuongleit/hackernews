@@ -38,8 +38,11 @@ class StoryFragment : Fragment(), Injectable {
 
         val adapter = StoryAdapter(activity!!)
         this.adapter = adapter
-        binding.recyclerView.adapter = adapter
-        viewModel.stories.observe(this, Observer { stories ->
+        binding.rvStories.adapter = adapter
+        viewModel.liveStories.observe(this, Observer { stories ->
+            if (stories != null && stories.isNotEmpty()) {
+                this.binding.loading = false
+            }
             adapter.submitList(stories)
         })
     }
@@ -53,6 +56,11 @@ class StoryFragment : Fragment(), Injectable {
                 false)
         this.binding = binding
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.binding.loading = true
     }
 
     companion object {
