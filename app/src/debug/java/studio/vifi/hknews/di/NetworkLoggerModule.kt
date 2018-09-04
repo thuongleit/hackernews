@@ -15,6 +15,6 @@ class NetworkLoggerModule {
 
     @NetworkInterceptor @Provides @Singleton @IntoSet
     fun provideNetworkLogger(): okhttp3.Interceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BASIC
     }
 }

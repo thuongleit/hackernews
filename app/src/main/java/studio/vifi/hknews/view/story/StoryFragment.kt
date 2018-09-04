@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_story.*
 import studio.vifi.hknews.R
+import studio.vifi.hknews.data.api.LOADING
 import studio.vifi.hknews.data.vo.Item
 import studio.vifi.hknews.databinding.FragmentStoryBinding
 import studio.vifi.hknews.di.Injectable
@@ -48,6 +50,10 @@ class StoryFragment : Fragment(), Injectable {
         viewModel.liveNetworkState.observe(this, Observer { networkState ->
             adapter.setState(networkState)
         })
+
+        viewModel.liveRefreshState?.observe(this, Observer {
+            swipe_refresh.isRefreshing = (it is LOADING)
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +70,9 @@ class StoryFragment : Fragment(), Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.binding.loading = true
+        swipe_refresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
     }
 
     companion object {

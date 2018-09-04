@@ -32,6 +32,9 @@ abstract class ItemDao {
     @Query("SELECT EXISTS (SELECT id FROM items WHERE id = :itemId)")
     abstract fun exists(itemId: Long): Boolean
 
+    @Query("SELECT id FROM items ORDER BY id DESC LIMIT 1")
+    abstract fun lastestItemId(): Long
+
     open fun loadByType(type: Item.StoryType): DataSource.Factory<Int, Item> {
         return loadByType(type.ordinal)
     }

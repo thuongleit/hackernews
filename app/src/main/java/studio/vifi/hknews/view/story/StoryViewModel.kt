@@ -24,6 +24,11 @@ class StoryViewModel @Inject constructor(itemRepository: ItemRepository) : ViewM
     val liveNetworkState: LiveData<NetworkState> = switchMap(liveRequest) {
         it.networkState
     }
+    val liveRefreshState = switchMap(liveRequest) { it.refreshState }
+
+    fun refresh() {
+        liveRequest.value?.refresh?.invoke()
+    }
 
     fun loadStories(type: Item.StoryType): Boolean {
         if (liveStoryType.value == type) {
