@@ -1,6 +1,6 @@
 package studio.vifi.hknews.data.repository
 
-import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import studio.vifi.hknews.AppExecutors
@@ -15,7 +15,7 @@ class ItemRepository @Inject constructor(
         private val database: HackerNewsDb,
         private val appExecutors: AppExecutors
 ) {
-    fun fetchStories(type: Item.StoryType, requestPageSize: Int = DEFAULT_LOCAL_PAGE_SIZE): LiveData<PagedList<Item>> {
+    fun fetchStories(type: Item.StoryType, requestPageSize: Int = DEFAULT_LOCAL_PAGE_SIZE): Listing<Item> {
 //        val instance = WorkManager.getInstance()
 //        instance.let { workManager ->
 //            //schedule a worker to do the rest
@@ -49,9 +49,17 @@ class ItemRepository @Inject constructor(
             database.itemDao().insert(*items.toTypedArray())
         }
 
-        return LivePagedListBuilder<Int, Item>(itemDataSource, pagedConfig)
+        val pagedList = LivePagedListBuilder<Int, Item>(itemDataSource, pagedConfig)
                 .setBoundaryCallback(boundaryCallback)
                 .build()
+
+        return Listing(
+                pagedList = pagedList,
+                networkState = boundaryCallback.networkState,
+                retry = {},
+                refresh = {},
+                refreshState = MutableLiveData()
+        )
     }
 
 //    fun fetchDirectKids(itemId: Long, pagesSize: Int): Listing<Item> {

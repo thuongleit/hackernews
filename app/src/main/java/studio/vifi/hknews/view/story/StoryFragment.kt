@@ -45,6 +45,9 @@ class StoryFragment : Fragment(), Injectable {
                 this.binding.loading = false
             }
         })
+        viewModel.liveNetworkState.observe(this, Observer { networkState ->
+            adapter.setState(networkState)
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

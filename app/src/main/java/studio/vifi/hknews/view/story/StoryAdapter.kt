@@ -11,13 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import studio.vifi.hknews.R
+import studio.vifi.hknews.data.api.FAILED
+import studio.vifi.hknews.data.api.LOADING
 import studio.vifi.hknews.data.vo.Item
+import studio.vifi.hknews.databinding.NetworkStateItemBinding
 import studio.vifi.hknews.databinding.StoryItemBinding
-import studio.vifi.hknews.view.common.DataBoundListAdapter
+import studio.vifi.hknews.view.common.NetworkDataBoundListAdapter
 import studio.vifi.hknews.view.item.StoryActivity
 import studio.vifi.hknews.view.item.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
 
-class StoryAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
+class StoryAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->
@@ -42,9 +45,23 @@ class StoryAdapter(private val activity: Activity) : DataBoundListAdapter<Item, 
         return createBinding(parent, R.layout.story_item) as StoryItemBinding
     }
 
+    override fun createNetworkBinding(parent: ViewGroup): NetworkStateItemBinding {
+        return createBinding(parent, R.layout.network_state_item) as NetworkStateItemBinding
+    }
+
     override fun bindItem(binding: StoryItemBinding, item: Item) {
         binding.item = item
         binding.adapter = this
+    }
+
+    override fun bindNetworkState(binding: NetworkStateItemBinding) {
+        when (networkState) {
+            is LOADING -> binding.loading = true
+            is FAILED -> {
+                binding.failed = true
+                binding.message = (networkState as FAILED).msg
+            }
+        }
     }
 
     private fun createBinding(parent: ViewGroup, layoutId: Int): ViewDataBinding {
