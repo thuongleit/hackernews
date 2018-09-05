@@ -16,7 +16,7 @@ abstract class NetworkDataBoundListAdapter<T, V : ViewDataBinding, N : ViewDataB
         return when (viewType) {
             DATA_TYPE -> super.onCreateViewHolder(parent, viewType)
             NETWORK_TYPE -> DataBoundViewHolder(createNetworkBinding(parent))
-            else -> throw IllegalArgumentException("unknown view type $viewType")
+            else -> throw IllegalArgumentException("unknown view requestType $viewType")
         }
     }
 

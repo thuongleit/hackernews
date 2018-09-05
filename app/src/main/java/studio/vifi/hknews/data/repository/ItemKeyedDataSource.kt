@@ -20,21 +20,18 @@ class ItemKeyedDataSource(
 
     private val itemIds: MutableList<Long> = mutableListOf()
 
-    /**
-     * There is no sync on the state because paging will always call loadInitial first then wait
-     * for it to return some success value before calling loadAfter and we don't support loadBefore
-     * in this example.
-     * <p>
-     * See BoundaryCallback example for a more complete example on syncing multiple network states.
-     */
     val networkState = MutableLiveData<NetworkState>()
-
-    val initialLoad = MutableLiveData<NetworkState>()
 
     // keep a function reference for the retry event
     private var retry: (() -> Any)? = null
 
-    fun retryAllFailed() {
+    fun refresh() {
+        networkState.postValue(LOADING(RequestType.REFRESH))
+        itemIds.clear()
+        invalidate()
+    }
+
+    fun retry() {
         val prevRetry = retry
         retry = null
         prevRetry?.let {
@@ -48,7 +45,9 @@ class ItemKeyedDataSource(
             params: LoadInitialParams<Long>,
             callback: LoadInitialCallback<Item>) {
 
-        initialLoad.postValue(NetworkState.loading())
+        if (!isRefreshing()) {
+            networkState.postValue(LOADING(RequestType.INITIAL_LOAD))
+        }
 
         if (itemIds.isEmpty()) {
             api.getItems(requestType.requestPath()).enqueue(object : Callback<List<Long>> {
@@ -57,8 +56,11 @@ class ItemKeyedDataSource(
                     retry = {
                         loadInitial(params, callback)
                     }
-                    val error = NetworkState.failed(t.message ?: "unknown error")
-                    initialLoad.postValue(error)
+                    if (!isRefreshing()) {
+                        networkState.postValue(ERROR(RequestType.INITIAL_LOAD, t))
+                    } else {
+                        networkState.postValue(ERROR(RequestType.REFRESH, t))
+                    }
                 }
 
                 override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
@@ -71,7 +73,11 @@ class ItemKeyedDataSource(
                             loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
                         } ?: emptyList()
 
-                        initialLoad.postValue(NetworkState.loaded())
+                        if (!isRefreshing()) {
+                            networkState.postValue(LOADED(RequestType.INITIAL_LOAD))
+                        } else {
+                            networkState.postValue(LOADED(RequestType.REFRESH))
+                        }
                         postResult(items, callback)
                     }
                 }
@@ -79,7 +85,11 @@ class ItemKeyedDataSource(
         } else {
             networkExecutor.execute {
                 val items = loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
-                initialLoad.postValue(NetworkState.loaded())
+                if (!isRefreshing()) {
+                    networkState.postValue(LOADED(RequestType.INITIAL_LOAD))
+                } else {
+                    networkState.postValue(LOADED(RequestType.INITIAL_LOAD))
+                }
                 postResult(items, callback)
             }
         }
@@ -90,7 +100,7 @@ class ItemKeyedDataSource(
     }
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Item>) {
-        networkState.postValue(NetworkState.loading())
+        networkState.postValue(LOADING(RequestType.LOAD_MORE))
 
         if (itemIds.isEmpty()) {
             api.getItems(requestType.requestPath()).enqueue(object : Callback<List<Long>> {
@@ -99,8 +109,7 @@ class ItemKeyedDataSource(
                     retry = {
                         loadAfter(params, callback)
                     }
-                    val error = NetworkState.failed(t.message ?: "unknown error")
-                    networkState.postValue(error)
+                    networkState.postValue(ERROR(RequestType.LOAD_MORE, t))
                 }
 
                 override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
@@ -113,12 +122,14 @@ class ItemKeyedDataSource(
                             loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
                         } ?: emptyList()
 
+                        networkState.postValue(LOADED(RequestType.LOAD_MORE))
                         postResult(items, callback)
                     }
                 }
             })
         } else {
             networkExecutor.execute {
+                networkState.postValue(LOADED(RequestType.LOAD_MORE))
                 val items = loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
                 postResult(items, callback)
             }
@@ -130,7 +141,6 @@ class ItemKeyedDataSource(
     private fun postResult(items: List<Item>, callback: LoadCallback<Item>) {
         retry = null
         callback.onResult(items)
-        networkState.postValue(NetworkState.loaded())
     }
 
     @WorkerThread
@@ -169,6 +179,10 @@ class ItemKeyedDataSource(
                         null
                     }
                 }
+    }
+
+    fun isRefreshing(): Boolean {
+        return (networkState.value is LOADING && networkState.value?.requestType == RequestType.REFRESH)
     }
 
 //    override fun loadKidIds(): Single<List<Long>> {

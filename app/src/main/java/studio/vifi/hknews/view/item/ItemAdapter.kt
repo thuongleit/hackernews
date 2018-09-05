@@ -59,7 +59,7 @@ class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<
             is LOADING -> binding.loading = true
             is ERROR -> {
                 binding.failed = true
-                binding.message = (networkState as ERROR).msg
+                binding.message = (networkState as ERROR).error?.message ?: "unknown error"
             }
         }
     }

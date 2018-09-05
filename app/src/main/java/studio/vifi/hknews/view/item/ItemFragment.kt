@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_item.*
 import studio.vifi.hknews.R
 import studio.vifi.hknews.data.model.StoryType
 import studio.vifi.hknews.data.repository.LOADING
+import studio.vifi.hknews.data.repository.RequestType
 import studio.vifi.hknews.databinding.FragmentItemBinding
 import studio.vifi.hknews.di.Injectable
 import studio.vifi.hknews.util.autoCleared
@@ -34,7 +35,7 @@ class ItemFragment : Fragment(), Injectable {
         model = ViewModelProviders.of(this, viewModelFactory).get(ItemViewModel::class.java)
 
         val storyType = arguments?.getString(ARG_REQUEST_TYPE)
-                ?: throw IllegalArgumentException("Required argument \"type\" is missing and does not have an android:defaultValue")
+                ?: throw IllegalArgumentException("Required argument \"requestType\" is missing and does not have an android:defaultValue")
 
         model.requestItems(StoryType.valueOf(storyType))
 
@@ -45,10 +46,14 @@ class ItemFragment : Fragment(), Injectable {
             adapter.submitList(stories)
         })
         model.liveNetworkState.observe(this, Observer { networkState ->
-            adapter.setState(networkState)
-        })
-        model.liveRefreshState.observe(this, Observer {
-            swipe_refresh.isRefreshing = (it is LOADING)
+            when (networkState?.requestType) {
+                RequestType.INITIAL_LOAD -> {
+                }
+                RequestType.REFRESH -> swipe_refresh.isRefreshing = (networkState is LOADING)
+                RequestType.LOAD_MORE -> {
+                    adapter.setState(networkState)
+                }
+            }
         })
         swipe_refresh.setOnRefreshListener {
             model.refresh()

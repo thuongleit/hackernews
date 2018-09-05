@@ -18,8 +18,6 @@ class ItemViewModel @Inject constructor(itemRepository: ItemRepository) : ViewMo
 
     val liveNetworkState = switchMap(liveResult, { it.networkState })
 
-    val liveRefreshState = switchMap(liveResult, { it.refreshState })
-
     fun refresh() {
         liveResult.value?.refresh?.invoke()
     }

@@ -11,7 +11,7 @@ import android.view.ViewGroup
  * A generic RecyclerView adapter that uses Data Binding & DiffUtil.
  *
  * @param <T> Type of the items in the list
- * @param <B> The type of the ViewDataBinding
+ * @param <B> The requestType of the ViewDataBinding
 </V></T> */
 abstract class DataBoundListAdapter<T, V : ViewDataBinding>(
         diffCallback: DiffUtil.ItemCallback<T>

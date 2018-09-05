@@ -15,7 +15,7 @@ abstract class ExpendableDataBoundListAdapter<T, P : ViewDataBinding, C : ViewDa
         return when (viewType) {
             PARENT_TYPE -> DataBoundViewHolder(createParentBinding(parent))
             CHILD_TYPE -> DataBoundViewHolder(createChildBinding(parent))
-            else -> throw IllegalArgumentException("unknown view type $viewType")
+            else -> throw IllegalArgumentException("unknown view requestType $viewType")
         }
     }
 

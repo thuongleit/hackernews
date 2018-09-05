@@ -1,14 +1,12 @@
 package studio.vifi.hknews.data.repository
 
+sealed class NetworkState(val requestType: RequestType,
+                          val error: Throwable? = null)
 
-sealed class NetworkState {
-    companion object {
-        fun loaded() = LOADED
-        fun loading() = LOADING
-        fun failed(msg: String? = null) = ERROR(msg)
-    }
+class LOADED(type: RequestType) : NetworkState(type)
+class LOADING(type: RequestType) : NetworkState(type)
+class ERROR(type: RequestType, throwable: Throwable? = null) : NetworkState(type, throwable)
+
+enum class RequestType {
+    INITIAL_LOAD, LOAD_MORE, REFRESH
 }
-
-object LOADED : NetworkState()
-object LOADING : NetworkState()
-data class ERROR(val msg: String? = null) : NetworkState()
