@@ -25,7 +25,7 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/story_item" />
 
-        <me.thuongle.hknews.widget.PrimaryColorProgressBar
+        <studio.vifi.hknews.widget.PrimaryColorProgressBar
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
