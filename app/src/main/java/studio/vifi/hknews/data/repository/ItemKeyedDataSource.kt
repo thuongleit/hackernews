@@ -2,6 +2,7 @@ package studio.vifi.hknews.data.repository
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.ItemKeyedDataSource
+import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,8 +26,11 @@ class ItemKeyedDataSource(
     // keep a function reference for the retry event
     private var retry: (() -> Any)? = null
 
+    private var currentNetworkType: RequestType? = null
+
+    @MainThread
     fun refresh() {
-        networkState.postValue(LOADING(RequestType.REFRESH))
+        currentNetworkType = RequestType.REFRESH
         itemIds.clear()
         invalidate()
     }
@@ -46,9 +50,10 @@ class ItemKeyedDataSource(
             callback: LoadInitialCallback<Item>) {
 
         if (!isRefreshing()) {
-            networkState.postValue(LOADING(RequestType.INITIAL_LOAD))
+            currentNetworkType = RequestType.INITIAL_LOAD
         }
 
+        networkState.postValue(LOADING(currentNetworkType!!))
         if (itemIds.isEmpty()) {
             api.getItems(requestType.requestPath()).enqueue(object : Callback<List<Long>> {
                 override fun onFailure(call: Call<List<Long>>, t: Throwable) {
@@ -56,11 +61,7 @@ class ItemKeyedDataSource(
                     retry = {
                         loadInitial(params, callback)
                     }
-                    if (!isRefreshing()) {
-                        networkState.postValue(ERROR(RequestType.INITIAL_LOAD, t))
-                    } else {
-                        networkState.postValue(ERROR(RequestType.REFRESH, t))
-                    }
+                    networkState.postValue(ERROR(currentNetworkType!!, t))
                 }
 
                 override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
@@ -73,23 +74,15 @@ class ItemKeyedDataSource(
                             loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
                         } ?: emptyList()
 
-                        if (!isRefreshing()) {
-                            networkState.postValue(LOADED(RequestType.INITIAL_LOAD))
-                        } else {
-                            networkState.postValue(LOADED(RequestType.REFRESH))
-                        }
+                        networkState.postValue(LOADED(currentNetworkType!!))
                         postResult(items, callback)
                     }
                 }
             })
         } else {
             networkExecutor.execute {
+                networkState.postValue(LOADED(currentNetworkType!!))
                 val items = loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
-                if (!isRefreshing()) {
-                    networkState.postValue(LOADED(RequestType.INITIAL_LOAD))
-                } else {
-                    networkState.postValue(LOADED(RequestType.INITIAL_LOAD))
-                }
                 postResult(items, callback)
             }
         }
@@ -100,7 +93,8 @@ class ItemKeyedDataSource(
     }
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Item>) {
-        networkState.postValue(LOADING(RequestType.LOAD_MORE))
+        currentNetworkType = RequestType.LOAD_MORE
+        networkState.postValue(LOADING(currentNetworkType!!))
 
         if (itemIds.isEmpty()) {
             api.getItems(requestType.requestPath()).enqueue(object : Callback<List<Long>> {
@@ -109,7 +103,7 @@ class ItemKeyedDataSource(
                     retry = {
                         loadAfter(params, callback)
                     }
-                    networkState.postValue(ERROR(RequestType.LOAD_MORE, t))
+                    networkState.postValue(ERROR(currentNetworkType!!, t))
                 }
 
                 override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
@@ -122,7 +116,7 @@ class ItemKeyedDataSource(
                             loadItems(requestItemIds = itemIds, loadSize = params.requestedLoadSize)
                         } ?: emptyList()
 
-                        networkState.postValue(LOADED(RequestType.LOAD_MORE))
+                        networkState.postValue(LOADED(currentNetworkType!!))
                         postResult(items, callback)
                     }
                 }
@@ -182,7 +176,7 @@ class ItemKeyedDataSource(
     }
 
     fun isRefreshing(): Boolean {
-        return (networkState.value is LOADING && networkState.value?.requestType == RequestType.REFRESH)
+        return currentNetworkType == RequestType.REFRESH
     }
 
 //    override fun loadKidIds(): Single<List<Long>> {

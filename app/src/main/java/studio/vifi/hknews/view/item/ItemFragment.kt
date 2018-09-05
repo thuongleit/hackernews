@@ -48,6 +48,7 @@ class ItemFragment : Fragment(), Injectable {
         model.liveNetworkState.observe(this, Observer { networkState ->
             when (networkState?.requestType) {
                 RequestType.INITIAL_LOAD -> {
+                    this.binding.initLoading = (networkState is LOADING)
                 }
                 RequestType.REFRESH -> swipe_refresh.isRefreshing = (networkState is LOADING)
                 RequestType.LOAD_MORE -> {

@@ -26,7 +26,7 @@ class ItemRepository @Inject constructor(
         return Listing(data = livePagedList,
                 networkState = switchMap(sourceFactory.liveDataSource, {it.networkState}),
                 refresh = {
-                    sourceFactory.liveDataSource.value?.invalidate()
+                    sourceFactory.liveDataSource.value?.refresh()
                 },
                 retry = {
                     sourceFactory.liveDataSource.value?.retry()
@@ -47,7 +47,7 @@ class ItemRepository @Inject constructor(
         return Listing(data = livePagedList,
                 networkState = switchMap(sourceFactory.liveDataSource, {it.networkState}),
                 refresh = {
-                    sourceFactory.liveDataSource.value?.invalidate()
+                    sourceFactory.liveDataSource.value?.refresh()
                 },
                 retry = {
                     sourceFactory.liveDataSource.value?.retry()
