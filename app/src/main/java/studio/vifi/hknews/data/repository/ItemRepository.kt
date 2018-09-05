@@ -2,7 +2,6 @@ package studio.vifi.hknews.data.repository
 
 import android.arch.lifecycle.Transformations.switchMap
 import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
 import studio.vifi.hknews.AppExecutors
 import studio.vifi.hknews.data.api.ApiService
 import studio.vifi.hknews.data.model.Item
@@ -13,48 +12,60 @@ class ItemRepository @Inject constructor(
         private val apiService: ApiService,
         private val appExecutors: AppExecutors
 ) {
-    fun fetchItems(type: StoryType,
-                   pagesSize: Int = DEFAULT_REQUEST_PAGE_SIZE): Listing<Item> {
+    fun loadItems(type: StoryType,
+                  requestSize: Int = DEFAULT_REQUEST_PAGE_SIZE): Listing<Item> {
 
         val sourceFactory = object : DataSourceFactory<Long, Item, ItemKeyedDataSource>() {
             override fun createSource(): ItemKeyedDataSource =
                     ItemKeyedDataSource(apiService, type, appExecutors.networkIO())
         }
-        val config = PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setInitialLoadSizeHint(pagesSize)
-                .setPageSize(pagesSize)
+        val livePagedList = LivePagedListBuilder<Long, Item>(sourceFactory, requestSize)
+                .setFetchExecutor(appExecutors.networkIO())
                 .build()
 
-        val livePagedList = LivePagedListBuilder<Long, Item>(sourceFactory, config)
-                .build()
-
-        return Listing(pagedList = livePagedList,
-                networkState = switchMap(sourceFactory.liveSource) { it.networkState }
-        )
+        return Listing(data = livePagedList,
+                networkState = switchMap(sourceFactory.liveDataSource) {
+                    it.networkState
+                },
+                refreshState = switchMap(sourceFactory.liveDataSource) {
+                    it.initialLoad
+                },
+                refresh = {
+                    sourceFactory.liveDataSource.value?.invalidate()
+                },
+                retry = {
+                    sourceFactory.liveDataSource.value?.retryAllFailed()
+                })
     }
 
-    fun fetchDirectKids(itemId: Long, pagesSize: Int): Listing<Item> {
+    fun fetchDirectKids(itemId: Long,
+                        requestSize: Int = DEFAULT_REQUEST_PAGE_SIZE): Listing<Item> {
 
         val sourceFactory = object : DataSourceFactory<Long, Item, ItemKeyedDataSource>() {
             override fun createSource(): ItemKeyedDataSource =
-                    ItemKeyedDataSource(apiService, StoryType.ASK, appExecutors.networkIO())
+                    ItemKeyedDataSource(apiService, StoryType.BEST, appExecutors.networkIO())
         }
-        val config = PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setInitialLoadSizeHint(pagesSize)
-                .setPageSize(pagesSize)
+        val livePagedList = LivePagedListBuilder<Long, Item>(sourceFactory, requestSize)
+                .setFetchExecutor(appExecutors.networkIO())
                 .build()
 
-        val livePagedList = LivePagedListBuilder<Long, Item>(sourceFactory, config)
-                .build()
-
-        return Listing(pagedList = livePagedList,
-                networkState = switchMap(sourceFactory.liveSource) { it.networkState })
+        return Listing(data = livePagedList,
+                networkState = switchMap(sourceFactory.liveDataSource) {
+                    it.networkState
+                },
+                refreshState = switchMap(sourceFactory.liveDataSource) {
+                    it.initialLoad
+                },
+                refresh = {
+                    sourceFactory.liveDataSource.value?.invalidate()
+                },
+                retry = {
+                    sourceFactory.liveDataSource.value?.retryAllFailed()
+                })
 
     }
 
     companion object {
-        const val DEFAULT_REQUEST_PAGE_SIZE = 20
+        const val DEFAULT_REQUEST_PAGE_SIZE = 10
     }
 }

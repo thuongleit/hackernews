@@ -1,37 +1,38 @@
 package studio.vifi.hknews.view.item
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations.map
 import android.arch.lifecycle.Transformations.switchMap
 import android.arch.lifecycle.ViewModel
-import android.arch.paging.PagedList
-import studio.vifi.hknews.data.model.Item
 import studio.vifi.hknews.data.model.StoryType
 import studio.vifi.hknews.data.repository.ItemRepository
-import studio.vifi.hknews.data.repository.NetworkState
 import javax.inject.Inject
 
 class ItemViewModel @Inject constructor(itemRepository: ItemRepository) : ViewModel() {
 
-    private val storyType: MutableLiveData<StoryType> = MutableLiveData()
-    private val liveData = map(storyType) {
-        itemRepository.fetchItems(it, 20)
+    private val liveRequestType = MutableLiveData<StoryType>()
+
+    private val liveResult = map(liveRequestType, { itemRepository.loadItems(it) })
+
+    val liveItems = switchMap(liveResult, { it.data })
+
+    val liveNetworkState = switchMap(liveResult, { it.networkState })
+
+    val liveRefreshState = switchMap(liveResult, { it.refreshState })
+
+    fun refresh() {
+        liveResult.value?.refresh?.invoke()
     }
 
-    val stories: LiveData<PagedList<Item>> = switchMap(liveData) { data ->
-        data.pagedList
+    fun retry() {
+        liveResult.value?.retry?.invoke()
     }
 
-    val networkState: LiveData<NetworkState> = switchMap(liveData) {
-        it.networkState
-    }
-
-    fun showStory(type: StoryType): Boolean {
-        if (storyType.value == type) {
+    fun requestItems(type: StoryType): Boolean {
+        if (liveRequestType.value == type) {
             return false
         }
-        storyType.value = type
+        liveRequestType.value = type
         return true
     }
 }

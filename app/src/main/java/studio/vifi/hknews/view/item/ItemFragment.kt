@@ -9,8 +9,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_item.*
 import studio.vifi.hknews.R
 import studio.vifi.hknews.data.model.StoryType
+import studio.vifi.hknews.data.repository.LOADING
 import studio.vifi.hknews.databinding.FragmentItemBinding
 import studio.vifi.hknews.di.Injectable
 import studio.vifi.hknews.util.autoCleared
@@ -19,7 +21,7 @@ import javax.inject.Inject
 
 class ItemFragment : Fragment(), Injectable {
 
-    private lateinit var viewModel: ItemViewModel
+    private lateinit var model: ItemViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -29,22 +31,28 @@ class ItemFragment : Fragment(), Injectable {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ItemViewModel::class.java)
+        model = ViewModelProviders.of(this, viewModelFactory).get(ItemViewModel::class.java)
 
-        val storyType = arguments?.getString(ARG_TYPE)
+        val storyType = arguments?.getString(ARG_REQUEST_TYPE)
                 ?: throw IllegalArgumentException("Required argument \"type\" is missing and does not have an android:defaultValue")
 
-        viewModel.showStory(StoryType.valueOf(storyType))
+        model.requestItems(StoryType.valueOf(storyType))
 
         val adapter = ItemAdapter(activity!!)
         this.adapter = adapter
         binding.recyclerView.adapter = adapter
-        viewModel.stories.observe(this, Observer { stories ->
+        model.liveItems.observe(this, Observer { stories ->
             adapter.submitList(stories)
         })
-        viewModel.networkState.observe(this, Observer { networkState ->
+        model.liveNetworkState.observe(this, Observer { networkState ->
             adapter.setState(networkState)
         })
+        model.liveRefreshState.observe(this, Observer {
+            swipe_refresh.isRefreshing = (it is LOADING)
+        })
+        swipe_refresh.setOnRefreshListener {
+            model.refresh()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +67,6 @@ class ItemFragment : Fragment(), Injectable {
     }
 
     companion object {
-        const val ARG_TYPE = "type"
+        const val ARG_REQUEST_TYPE = "type"
     }
 }

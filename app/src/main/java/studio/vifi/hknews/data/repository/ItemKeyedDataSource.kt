@@ -20,8 +20,6 @@ class ItemKeyedDataSource(
 
     private val itemIds: MutableList<Long> = mutableListOf()
 
-    val liveSource: MutableLiveData<studio.vifi.hknews.data.repository.ItemKeyedDataSource> = MutableLiveData()
-
     /**
      * There is no sync on the state because paging will always call loadInitial first then wait
      * for it to return some success value before calling loadAfter and we don't support loadBefore
@@ -51,7 +49,6 @@ class ItemKeyedDataSource(
             callback: LoadInitialCallback<Item>) {
 
         initialLoad.postValue(NetworkState.loading())
-        networkState.postValue(NetworkState.loading())
 
         if (itemIds.isEmpty()) {
             api.getItems(requestType.requestPath()).enqueue(object : Callback<List<Long>> {
@@ -61,7 +58,6 @@ class ItemKeyedDataSource(
                         loadInitial(params, callback)
                     }
                     val error = NetworkState.failed(t.message ?: "unknown error")
-                    networkState.postValue(error)
                     initialLoad.postValue(error)
                 }
 

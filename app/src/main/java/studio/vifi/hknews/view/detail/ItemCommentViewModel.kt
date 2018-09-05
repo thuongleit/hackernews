@@ -20,7 +20,7 @@ class ItemCommentViewModel @Inject constructor(itemRepository: ItemRepository) :
     }
 
     val comments: LiveData<PagedList<Item>> = switchMap(liveData) { data ->
-        data.pagedList
+        data.data
     }
 
     val networkState: LiveData<NetworkState> = switchMap(liveData) {
