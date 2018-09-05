@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/comments_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:dragDismissDistance="@dimen/drag_dismiss_distance"
+    app:dragDismissScale="0.95"
     tools:context=".view.detail.StoryActivity">
 
-    <fragment
-        android:id="@+id/nav_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <!-- Description added as header to the list.
+         see layout/designer_news_story_description -->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comments_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_story" />
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/extended_height_toolbar"
+        android:paddingBottom="@dimen/padding_normal"
+        android:scrollbars="vertical" />
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
+    <studio.vifi.hknews.widget.CollapsingTitleLayout
+        android:id="@+id/backdrop_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/story_navigation" />
+        android:minHeight="@dimen/extended_height_toolbar">
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/story_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize" />
+
+    </studio.vifi.hknews.widget.CollapsingTitleLayout>
+
+</com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <!-- comments activity -->
+    <dimen name="padding_normal">24dp</dimen>
+
+    <!-- comments activity -->
+    <dimen name="extended_height_toolbar">178dp</dimen>
+</resources>

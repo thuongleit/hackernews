@@ -15,7 +15,6 @@ import studio.vifi.hknews.data.repository.LOADING
 import studio.vifi.hknews.databinding.FragmentCommentBinding
 import studio.vifi.hknews.di.Injectable
 import studio.vifi.hknews.util.autoCleared
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class CommentsFragment : Fragment(), Injectable {
@@ -32,10 +31,10 @@ class CommentsFragment : Fragment(), Injectable {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ItemCommentViewModel::class.java)
 
-        val storyId = CommentsFragmentArgs.fromBundle(arguments).id
-                ?: throw IllegalArgumentException("Required argument \"id\" is missing and does not have an android:defaultValue")
-
-        viewModel.setId(storyId.toLong())
+//        val storyId = CommentsFragmentArgs.fromBundle(arguments).id
+//                ?: throw IllegalArgumentException("Required argument \"id\" is missing and does not have an android:defaultValue")
+//
+//        viewModel.setId(storyId.toLong())
 
         val adapter = CommentItemAdapter().also {
             this.adapter = it

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- standard metrics -->
+    <dimen name="drag_dismiss_distance">168dp</dimen> <!-- 3 * ?android:actionBarSize -->
+
+</resources>

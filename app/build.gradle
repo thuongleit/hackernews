@@ -3,6 +3,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'com.android.application'
@@ -67,6 +68,7 @@ dependencies {
     api "com.android.support:appcompat-v7:${versions.supportLibrary}"
     api "com.android.support:cardview-v7:${versions.supportLibrary}"
     api "com.android.support:customtabs:${versions.supportLibrary}"
+    api 'com.github.Commit451:ElasticDragDismissLayout:1.0.4'
 
     //AACs
     api "android.arch.persistence.room:runtime:${versions.room}"

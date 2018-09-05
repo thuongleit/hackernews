@@ -45,7 +45,7 @@ class ContentFragment : Fragment(), Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.wvContent.webViewClient = webViewClient
-        binding.url = ContentFragmentArgs.fromBundle(arguments).url
+//        binding.url = ContentFragmentArgs.fromBundle(arguments).url
     }
 
     companion object {
