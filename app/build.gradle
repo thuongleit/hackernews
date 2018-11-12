@@ -68,6 +68,7 @@ dependencies {
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
     implementation deps.retrofit.rxjava2
+    implementation deps.debug.okhttp_logging_interceptor
 
     implementation deps.dagger.runtime
     implementation deps.dagger.android
@@ -87,7 +88,6 @@ dependencies {
 
     debugImplementation deps.debug.stetho
     debugImplementation deps.debug.stetho_okhttp
-    debugImplementation deps.debug.okhttp_logging_interceptor
     debugImplementation deps.debug.leakcanary
 
     testImplementation deps.junit
