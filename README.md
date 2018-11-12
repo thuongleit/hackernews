@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/thuongleit/hackernews/tree/master.svg?style=shield)](https://circleci.com/gh/thuongleit/hackernews/tree/master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/17f22efa9d644ec0922e8d4e6fad3560)](https://www.codacy.com/app/thuongleit/hackernews?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thuongleit/hackernews&amp;utm_campaign=Badge_Grade)
+
 Hacker News
 =========================
 It is just another Hacker News Android app where I practice my skills with newest things.
