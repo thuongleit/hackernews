@@ -1,5 +1,8 @@
+[![Pre-release](https://img.shields.io/badge/pre--release-0.1.0-blue.svg)](https://github.com/thuongleit/hackernews/releases/tag/v0.1.0)
 [![CircleCI](https://circleci.com/gh/thuongleit/hackernews/tree/master.svg?style=shield)](https://circleci.com/gh/thuongleit/hackernews/tree/master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/17f22efa9d644ec0922e8d4e6fad3560)](https://www.codacy.com/app/thuongleit/hackernews?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thuongleit/hackernews&amp;utm_campaign=Badge_Grade)
+[![Android API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat&label=API&maxAge=300)](https://www.android.com/history/#/jellybean)
+[![License](https://img.shields.io/badge/License-apache%202.0-blue.svg?label=license&maxAge=1800)](https://github.com/thuongleit/hackernews/blob/master/LICENSE)
 
 Hacker News
 =========================
@@ -70,3 +73,20 @@ Inspired by
 
 [10.1]: https://github.com/googlesamples/android-sunflower
 [10.2]: https://github.com/googlesamples/android-architecture-components
+
+# License
+
+```
+Copyright 2018 Thuong Le
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.```
