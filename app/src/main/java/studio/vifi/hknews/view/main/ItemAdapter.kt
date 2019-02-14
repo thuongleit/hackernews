@@ -4,6 +4,9 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
@@ -11,12 +14,32 @@ import studio.vifi.hknews.R
 import studio.vifi.hknews.databinding.NetworkStateItemBinding
 import studio.vifi.hknews.databinding.StoryItemBinding
 import studio.vifi.hknews.model.vo.Item
+import studio.vifi.hknews.util.customtabs.CustomTabActivityHelper
 import studio.vifi.hknews.view.common.NetworkDataBoundListAdapter
 
 class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->
+        CustomTabActivityHelper.openCustomTab(
+                activity,
+                CustomTabsIntent.Builder()
+                        .setToolbarColor(
+                                ContextCompat.getColor(
+                                        activity,
+                                        R.color.colorPrimary
+                                )
+                        )
+                        .setShowTitle(true)
+                        .enableUrlBarHiding()
+                        .setSecondaryToolbarColor(ContextCompat.getColor(
+                                activity,
+                                android.R.color.white
+                        ))
+                        .addDefaultShareMenuItem()
+                        .build(),
+                item.url?.toUri()
+        )
     }
 
     override fun createItemBinding(parent: ViewGroup): StoryItemBinding {
