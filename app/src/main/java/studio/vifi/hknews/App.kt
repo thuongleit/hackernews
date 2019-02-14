@@ -22,7 +22,7 @@ open class App : Application(), HasActivityInjector {
         val crashlytics = CrashlyticsCore.Builder()
                 .disabled(BuildConfig.DEBUG)
                 .build()
-        Fabric.with(this,  Crashlytics.Builder().core(crashlytics).build())
+        Fabric.with(this, Crashlytics.Builder().core(crashlytics).build())
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -39,7 +39,7 @@ open class App : Application(), HasActivityInjector {
         private val KEY_TAG = "tag"
         private val KEY_MESSAGE = "message"
 
-        override fun log(priority: Int, tag: String?, message: String?, t: Throwable?) {
+        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
             when (priority) {
                 Log.VERBOSE, Log.DEBUG, Log.INFO -> return
 

@@ -12,7 +12,7 @@
         <argument
             android:name="type"
             android:defaultValue="NEW"
-            app:type="string" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/itemFragment2"
@@ -21,7 +21,7 @@
         <argument
             android:name="type"
             android:defaultValue="TOP"
-            app:type="string" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/itemFragment3"
@@ -30,6 +30,6 @@
         <argument
             android:name="type"
             android:defaultValue="BEST"
-            app:type="string" />
+            app:argType="string" />
     </fragment>
 </navigation>

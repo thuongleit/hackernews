@@ -1,11 +1,11 @@
 package studio.vifi.hknews.view.common
 
-import android.arch.paging.PagedListAdapter
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 
 /**
  * A generic RecyclerView adapter that uses Data Binding & DiffUtil.
@@ -15,7 +15,7 @@ import android.view.ViewGroup
 </V></T> */
 abstract class DataBoundListAdapter<T, V : ViewDataBinding>(
         diffCallback: DiffUtil.ItemCallback<T>
-) : PagedListAdapter<T, DataBoundViewHolder<*>>(diffCallback) {
+) : ListAdapter<T, DataBoundViewHolder<*>>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> =
             DataBoundViewHolder(createItemBinding(parent))

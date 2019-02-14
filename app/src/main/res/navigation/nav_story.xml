@@ -13,7 +13,7 @@
         <argument
             android:name="url"
             android:defaultValue=" "
-            app:type="string" />
+            app:argType="string" />
         <action
             android:id="@+id/showContent"
             app:destination="@id/contentFragment" />
@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_comment">
         <argument
             android:name="id"
-            app:type="string" />
+            app:argType="string" />
         <action
             android:id="@+id/showComments"
             app:destination="@id/commentsFragment" />

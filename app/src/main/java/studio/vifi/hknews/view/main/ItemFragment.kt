@@ -1,23 +1,22 @@
 package studio.vifi.hknews.view.main
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import studio.vifi.hknews.R
-import studio.vifi.hknews.vo.StoryType
+import studio.vifi.hknews.Result
 import studio.vifi.hknews.databinding.FragmentItemBinding
 import studio.vifi.hknews.di.Injectable
+import studio.vifi.hknews.model.vo.StoryType
 import studio.vifi.hknews.util.autoCleared
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-class ItemFragment : Fragment(), Injectable {
+class ItemFragment : androidx.fragment.app.Fragment(), Injectable {
 
     private lateinit var viewModel: ItemViewModel
 
@@ -34,17 +33,22 @@ class ItemFragment : Fragment(), Injectable {
         val storyType = arguments?.getString(ARG_TYPE)
                 ?: throw IllegalArgumentException("Required argument \"type\" is missing and does not have an android:defaultValue")
 
-        viewModel.showStory(StoryType.valueOf(storyType))
 
         val adapter = ItemAdapter(activity!!)
         this.adapter = adapter
         binding.recyclerView.adapter = adapter
-        viewModel.stories.observe(this, Observer { stories ->
-            adapter.submitList(stories)
+        viewModel.result.observe(this, Observer { result ->
+            when (result) {
+                is Result.Success -> {
+                    adapter.submitList(result.data)
+                }
+            }
         })
-        viewModel.networkState.observe(this, Observer { networkState ->
+/*        viewModel.networkState.observe(this, Observer { networkState ->
             adapter.setState(networkState)
-        })
+        })*/
+
+        viewModel.fetchItems(StoryType.valueOf(storyType))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -1,37 +1,35 @@
 package studio.vifi.hknews.view.main
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations.map
-import android.arch.lifecycle.Transformations.switchMap
-import android.arch.lifecycle.ViewModel
-import android.arch.paging.PagedList
-import studio.vifi.hknews.repository.ItemRepository
-import studio.vifi.hknews.repository.NetworkState
-import studio.vifi.hknews.vo.Item
-import studio.vifi.hknews.vo.StoryType
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import studio.vifi.hknews.LiveResult
+import studio.vifi.hknews.MediatorLiveResult
+import studio.vifi.hknews.model.usecase.FetchStoriesUseCase
+import studio.vifi.hknews.model.vo.Item
+import studio.vifi.hknews.model.vo.StoryType
 import javax.inject.Inject
 
-class ItemViewModel @Inject constructor(itemRepository: ItemRepository) : ViewModel() {
+class ItemViewModel @Inject constructor(private val useCase: FetchStoriesUseCase) : ViewModel() {
+    val result: LiveResult<List<Item>> = MediatorLiveResult()
 
-    private val storyType: MutableLiveData<StoryType> = MutableLiveData()
-    private val liveData = map(storyType) {
-        itemRepository.fetchStories(it, 20)
+    private val requestedStoryType: MutableLiveData<StoryType> = MutableLiveData()
+
+    init {
+        val dataSource = useCase.observe()
+        (result as MediatorLiveResult<List<Item>>).addSource(dataSource) { data ->
+            result.postValue(data)
+        }
+
+        result.addSource(requestedStoryType) { newRequest ->
+            newRequest?.let { useCase.execute(it) }
+        }
     }
 
-    val stories: LiveData<PagedList<Item>> = switchMap(liveData) { data ->
-        data.pagedList
-    }
-
-    val networkState: LiveData<NetworkState> = switchMap(liveData) {
-        it.networkState
-    }
-
-    fun showStory(type: StoryType): Boolean {
-        if (storyType.value == type) {
+    fun fetchItems(type: StoryType): Boolean {
+        if (requestedStoryType.value == type) {
             return false
         }
-        storyType.value = type
+        requestedStoryType.value = type
         return true
     }
 }

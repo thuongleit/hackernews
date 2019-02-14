@@ -3,12 +3,11 @@ package studio.vifi.hknews.di
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import studio.vifi.hknews.api.ApiService
-import studio.vifi.hknews.api.BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import studio.vifi.hknews.model.api.ApiService
+import studio.vifi.hknews.model.api.BASE_URL
 import javax.inject.Singleton
 
 @Module(includes = [NetworkLoggerModule::class])
@@ -30,7 +29,6 @@ class NetworkModule {
         return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(BASE_URL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
                 .build()
     }

@@ -1,10 +1,10 @@
 package studio.vifi.hknews.binding
 
-import android.databinding.BindingAdapter
 import android.text.Html
 import android.view.View
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 
 object BindingAdapters {
     @JvmStatic

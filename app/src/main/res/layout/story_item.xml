@@ -10,13 +10,13 @@
 
         <variable
             name="item"
-            type="studio.vifi.hknews.vo.Item" />
+            type="studio.vifi.hknews.model.vo.Item" />
 
         <import type="studio.vifi.hknews.util.DateTimeUtilKt" />
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -38,8 +38,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:textEmptyIfZero="@{true}"
-            app:text="@{item.score}" />
+            app:text="@{item.score}"
+            app:textEmptyIfZero="@{true}" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -103,5 +103,5 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_title"
             app:layout_constraintTop_toTopOf="@+id/tv_description" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

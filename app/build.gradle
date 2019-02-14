@@ -6,16 +6,15 @@ apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion build_versions.target_sdk
-    buildToolsVersion build_versions.build_tools
+    compileSdkVersion versions.compileSdk
 
     defaultConfig {
-        applicationId "studio.vifi.hknews"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
-        versionCode 1
+        applicationId names.applicationId
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode rootProject.gitCommitCount
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -46,77 +45,52 @@ android {
 }
 
 dependencies {
-    implementation deps.support.app_compat
-    implementation deps.support.recyclerview
-    implementation deps.support.cardview
-    implementation deps.support.design
-    implementation deps.support.vector_drawable
-    implementation deps.constraint_layout
+    //core
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
 
-    //Android Architecture Components
-    implementation deps.navigation.fragment_ktx
-    implementation deps.navigation.navigation_ui_ktx
-    implementation deps.room.runtime
-    kapt deps.room.compiler
-    implementation deps.paging
-    implementation deps.lifecycle.runtime
-    implementation deps.lifecycle.extensions
-    implementation deps.lifecycle.java8
-    kapt deps.lifecycle.compiler
+    //layout and views
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha02'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
 
-    //others
-    implementation deps.retrofit.runtime
-    implementation deps.retrofit.gson
-    implementation deps.retrofit.rxjava2
-    implementation deps.debug.okhttp_logging_interceptor
+    //AACs
+    implementation "android.arch.navigation:navigation-fragment-ktx:$versions.navigation"
+    implementation "android.arch.navigation:navigation-ui-ktx:$versions.navigation"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.1.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.1.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02'
 
-    implementation deps.dagger.runtime
-    implementation deps.dagger.android
-    implementation deps.dagger.android_support
-    kapt deps.dagger.android_support_compiler
-    kapt deps.dagger.compiler
+    //network and logging
+    implementation "com.squareup.okhttp3:okhttp:${versions.okhttp}"
+    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
+    implementation "androidx.core:core-ktx:${versions.coreKtx}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"
+    implementation "com.google.code.gson:gson:${versions.gson}"
+    //dependency injection
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    implementation "com.google.dagger:dagger-android:${versions.dagger}"
+    implementation "com.google.dagger:dagger-android-support:${versions.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 
-    implementation deps.kotlin.stdlib
+    //debugs tools
+    implementation "com.jakewharton.timber:timber:${versions.timber}"
+    implementation "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}"
+    implementation "com.google.firebase:firebase-core:${versions.firebase}"
 
-    implementation deps.rx.core
-    implementation deps.rx.android
-    implementation deps.rx.kotlin
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
+    debugImplementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp_logging_interceptor"
+    debugImplementation "com.facebook.stetho:stetho:$versions.stetho"
+    debugImplementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
 
-    implementation deps.timber
-    implementation deps.firebase.core
-    implementation deps.crashlytics
-
-    debugImplementation deps.debug.stetho
-    debugImplementation deps.debug.stetho_okhttp
-    debugImplementation deps.debug.leakcanary
-
-    testImplementation deps.junit
-    testImplementation deps.mock_web_server
-    testImplementation(deps.arch_core.testing, {
-        exclude group: 'com.android.support', module: 'support-compat'
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-core-utils'
-    })
-    testImplementation deps.mockito.core
-
-    androidTestImplementation deps.navigation.testing_ktx
-    androidTestImplementation deps.support.app_compat
-    androidTestImplementation deps.support.recyclerview
-    androidTestImplementation deps.support.cardview
-    androidTestImplementation deps.support.design
-
-    androidTestImplementation(deps.espresso.core, {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    })
-    androidTestImplementation(deps.espresso.contrib, {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    })
-
-    androidTestImplementation(deps.arch_core.testing, {
-    })
-    androidTestImplementation deps.dexmaker
-    androidTestImplementation deps.mockito.core, { exclude group: 'net.bytebuddy' }
+    //testings
 }
 apply plugin: 'com.google.gms.google-services'

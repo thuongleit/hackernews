@@ -1,6 +1,6 @@
 package studio.vifi.hknews.di
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import dagger.MapKey
 import javax.inject.Qualifier
 import kotlin.reflect.KClass

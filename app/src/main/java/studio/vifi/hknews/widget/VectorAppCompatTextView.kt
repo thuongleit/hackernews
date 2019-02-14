@@ -3,9 +3,9 @@ package studio.vifi.hknews.widget
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.v7.content.res.AppCompatResources
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.AppCompatTextView
 import studio.vifi.hknews.R
 
 class VectorAppCompatTextView : AppCompatTextView {

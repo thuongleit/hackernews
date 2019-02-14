@@ -1,20 +1,20 @@
-package studio.vifi.hknews.api
+package studio.vifi.hknews.model.api
 
-import io.reactivex.Single
-import studio.vifi.hknews.vo.Item
-import studio.vifi.hknews.vo.StoryType
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import studio.vifi.hknews.model.vo.Item
+import studio.vifi.hknews.model.vo.StoryType
 
 const val BASE_URL = "https://hacker-news.firebaseio.com/v0/"
 
 interface ApiService {
 
     @GET("{path}")
-    fun getStories(@Path("path") path: String): Single<List<Long>>
+    fun getStories(@Path("path") path: String): Call<List<Long>>
 
     @GET("item/{id}.json")
-    fun getItemDetail(@Path("id") id: Long): Single<Item>
+    fun getItem(@Path("id") id: Long): Call<Item>
 }
 
 fun StoryType.path(): String {

@@ -1,16 +1,14 @@
 package studio.vifi.hknews.view.common
 
-import android.databinding.ViewDataBinding
-import android.support.v7.util.DiffUtil
 import android.view.ViewGroup
-import studio.vifi.hknews.repository.LOADED
-import studio.vifi.hknews.repository.NetworkState
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
 
 abstract class NetworkDataBoundListAdapter<T, V : ViewDataBinding, N : ViewDataBinding>(
         diffCallback: DiffUtil.ItemCallback<T>
 ) : DataBoundListAdapter<T, V>(diffCallback) {
 
-    protected var networkState: NetworkState? = null
+    protected var networkState: studio.vifi.hknews.Result<T>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> {
         return when (viewType) {
@@ -30,7 +28,7 @@ abstract class NetworkDataBoundListAdapter<T, V : ViewDataBinding, N : ViewDataB
         }
     }
 
-    private fun hasExtraRow() = (networkState != null && networkState !is LOADED)
+    private fun hasExtraRow() = (networkState != null && networkState !is studio.vifi.hknews.Result.Running)
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
@@ -44,7 +42,7 @@ abstract class NetworkDataBoundListAdapter<T, V : ViewDataBinding, N : ViewDataB
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
-    fun setState(newNetworkState: NetworkState?) {
+    fun setState(newNetworkState: studio.vifi.hknews.Result<T>?) {
         val previousState = this.networkState
         val hadExtraRow = hasExtraRow()
         this.networkState = newNetworkState

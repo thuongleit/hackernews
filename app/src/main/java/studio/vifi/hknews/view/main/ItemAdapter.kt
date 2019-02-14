@@ -1,44 +1,22 @@
 package studio.vifi.hknews.view.main
 
 import android.app.Activity
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.os.Build
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
 import studio.vifi.hknews.R
 import studio.vifi.hknews.databinding.NetworkStateItemBinding
 import studio.vifi.hknews.databinding.StoryItemBinding
-import studio.vifi.hknews.repository.FAILED
-import studio.vifi.hknews.repository.LOADING
+import studio.vifi.hknews.model.vo.Item
 import studio.vifi.hknews.view.common.NetworkDataBoundListAdapter
-import studio.vifi.hknews.view.story.StoryActivity
-import studio.vifi.hknews.view.story.StoryActivity.Companion.SHARED_VIEW_TOOLBAR_TITLE
-import studio.vifi.hknews.vo.Item
 
 class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->
-        val intent = StoryActivity.newInstance(activity, item)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val sceneTransitionAnimation = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    activity,
-                    view.findViewById(R.id.tv_title),
-                    SHARED_VIEW_TOOLBAR_TITLE
-            )
-
-            ActivityCompat.startActivity(
-                    activity,
-                    intent,
-                    sceneTransitionAnimation.toBundle())
-        } else {
-            activity.startActivity(intent)
-        }
     }
 
     override fun createItemBinding(parent: ViewGroup): StoryItemBinding {
@@ -56,10 +34,10 @@ class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<
 
     override fun bindNetworkState(binding: NetworkStateItemBinding) {
         when (networkState) {
-            is LOADING -> binding.loading = true
-            is FAILED -> {
+            is studio.vifi.hknews.Result.Running -> binding.loading = true
+            is studio.vifi.hknews.Result.Failure -> {
                 binding.failed = true
-                binding.message = (networkState as FAILED).msg
+                binding.message = (networkState as studio.vifi.hknews.Result.Failure).exception.message
             }
         }
     }
