@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * A generic RecyclerView adapter that uses Data Binding & DiffUtil.
@@ -38,3 +39,10 @@ fun createBinding(parent: ViewGroup, layoutId: Int): ViewDataBinding {
             false
     )
 }
+
+/**
+ * A generic ViewHolder that works with a [ViewDataBinding].
+ * @param <V> The type of the ViewDataBinding.
+</V> */
+class DataBoundViewHolder<out V : ViewDataBinding> constructor(val binding: V) :
+        RecyclerView.ViewHolder(binding.root)

@@ -3,11 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <data>
+
+        <variable
+            name="loading"
+            type="Boolean" />
+
+        <variable
+            name="failed"
+            type="Boolean" />
+
+        <variable
+            name="errorMsg"
+            type="String" />
+
+        <variable
+            name="loadingNextPage"
+            type="Boolean" />
+
+        <variable
+            name="retryCallback"
+            type="studio.vifi.hknews.view.common.Callback" />
+
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/story_item" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/story_item" />
+
+        <include
+            layout="@layout/network_state_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:retryCallback="@{retryCallback}"
+            app:errorMsg="@{errorMsg}"
+            app:failed="@{failed}"
+            app:loading="@{loading}" />
+
+        <studio.vifi.hknews.widget.PrimaryColorProgressBar
+            android:id="@+id/progressbar_load_more"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|right|end"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            app:visibility="@{loadingNextPage}" />
+    </FrameLayout>
 </layout>

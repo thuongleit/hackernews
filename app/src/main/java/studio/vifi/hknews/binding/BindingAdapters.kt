@@ -5,6 +5,8 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import studio.vifi.hknews.R
+import studio.vifi.hknews.view.common.Callback
 
 object BindingAdapters {
     @JvmStatic
@@ -44,5 +46,22 @@ object BindingAdapters {
     @BindingAdapter("url")
     fun setUrl(wv: WebView, url: String) {
         wv.loadUrl(url)
+    }
+
+    @JvmStatic
+    @BindingAdapter("error")
+    fun connectionOnOffBasedOnErrorMsg(tv: TextView, text: String?) {
+        if (tv.context.getString(R.string.error_connection_lost_message) == text) {
+            tv.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_no_internet, 0, 0)
+        } else {
+            tv.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
+        }
+        tv.text = text
+    }
+
+    @JvmStatic
+    @BindingAdapter("callback")
+    fun setOnClickCallback(v: View, callback: Callback?) {
+        v.setOnClickListener { callback?.invoke(v) }
     }
 }

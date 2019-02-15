@@ -1,23 +1,20 @@
 package studio.vifi.hknews.view.main
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import studio.vifi.hknews.R
-import studio.vifi.hknews.databinding.NetworkStateItemBinding
 import studio.vifi.hknews.databinding.StoryItemBinding
 import studio.vifi.hknews.model.vo.Item
 import studio.vifi.hknews.util.customtabs.CustomTabActivityHelper
-import studio.vifi.hknews.view.common.NetworkDataBoundListAdapter
+import studio.vifi.hknews.view.common.DataBoundListAdapter
+import studio.vifi.hknews.view.common.createBinding
 
-class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<Item, StoryItemBinding, NetworkStateItemBinding>(
+class ItemAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
         DIFF_CALLBACK
 ) {
     val onItemClick: (View, Item) -> Unit = { view, item ->
@@ -46,32 +43,9 @@ class ItemAdapter(private val activity: Activity) : NetworkDataBoundListAdapter<
         return createBinding(parent, R.layout.story_item) as StoryItemBinding
     }
 
-    override fun createNetworkBinding(parent: ViewGroup): NetworkStateItemBinding {
-        return createBinding(parent, R.layout.network_state_item) as NetworkStateItemBinding
-    }
-
     override fun bindItem(binding: StoryItemBinding, item: Item) {
         binding.item = item
         binding.adapter = this
-    }
-
-    override fun bindNetworkState(binding: NetworkStateItemBinding) {
-        when (networkState) {
-            is studio.vifi.hknews.Result.Running -> binding.loading = true
-            is studio.vifi.hknews.Result.Failure -> {
-                binding.failed = true
-                binding.message = (networkState as studio.vifi.hknews.Result.Failure).exception.message
-            }
-        }
-    }
-
-    private fun createBinding(parent: ViewGroup, layoutId: Int): ViewDataBinding {
-        return DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                layoutId,
-                parent,
-                false
-        )
     }
 
     companion object {

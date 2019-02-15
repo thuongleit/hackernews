@@ -1,8 +1,0 @@
-<resources>
-
-    <style name="AppTheme" parent="AppTheme.Base">
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/item_change_bounds</item>
-        <item name="android:windowSharedElementExitTransition">@transition/item_change_bounds</item>
-    </style>
-</resources>
