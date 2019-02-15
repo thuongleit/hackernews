@@ -11,11 +11,14 @@ import javax.inject.Inject
 class FetchStoriesUseCase @Inject constructor(private val repository: ItemRepository)
     : MediatorUseCase<StoryType, List<Item>>() {
 
+    private var requestedParams: StoryType? = null
     private val stories = mutableListOf<Long>()
     private val receivedData = mutableSetOf<Item>()
     private var requestedPos: Int = 0
 
+
     override fun execute(parameters: StoryType) {
+        this.requestedParams = parameters
         reset()
         val executeSource = repository.fetchStories(parameters)
 
@@ -34,6 +37,7 @@ class FetchStoriesUseCase @Inject constructor(private val repository: ItemReposi
     }
 
     private fun reset() {
+        stories.clear()
         receivedData.clear()
     }
 
@@ -71,6 +75,26 @@ class FetchStoriesUseCase @Inject constructor(private val repository: ItemReposi
 
     fun canLoadMore(): Boolean {
         return stories.isNotEmpty() && receivedData.size > PAGE_SIZE / 2 && requestedPos <= stories.size - 1
+    }
+
+    fun refresh(): Boolean {
+        if (requestedParams == null) {
+            return false
+        }
+        val executeSource = repository.fetchStories(requestedParams!!)
+
+        result.removeSource(executeSource)
+        result.addSource(executeSource) { resultData ->
+            when (resultData) {
+                is Result.Success -> {
+                    stories.clear()
+                    receivedData.clear()
+                    resultData.data?.let { stories.addAll(it) }
+                    request(stories, 0)
+                }
+            }
+        }
+        return true
     }
 
     companion object {

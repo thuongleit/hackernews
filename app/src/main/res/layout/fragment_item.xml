@@ -31,13 +31,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_to_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/story_item" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/story_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <include
             layout="@layout/network_state_item"
@@ -45,10 +51,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            app:retryCallback="@{retryCallback}"
             app:errorMsg="@{errorMsg}"
             app:failed="@{failed}"
-            app:loading="@{loading}" />
+            app:loading="@{loading}"
+            app:retryCallback="@{retryCallback}" />
 
         <studio.vifi.hknews.widget.PrimaryColorProgressBar
             android:id="@+id/progressbar_load_more"
