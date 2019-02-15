@@ -27,42 +27,66 @@
 
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_to_refresh"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/story_item" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:title="@string/app_name"
+                app:titleTextColor="@android:color/white">
 
-        <include
-            layout="@layout/network_state_item"
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            app:errorMsg="@{errorMsg}"
-            app:failed="@{failed}"
-            app:loading="@{loading}"
-            app:retryCallback="@{retryCallback}" />
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <studio.vifi.hknews.widget.PrimaryColorProgressBar
-            android:id="@+id/progressbar_load_more"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="bottom|right|end"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            app:visibility="@{loadingNextPage}" />
-    </FrameLayout>
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_to_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/story_item" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <include
+                layout="@layout/network_state_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                app:errorMsg="@{errorMsg}"
+                app:failed="@{failed}"
+                app:loading="@{loading}"
+                app:retryCallback="@{retryCallback}" />
+
+            <studio.vifi.hknews.widget.PrimaryColorProgressBar
+                android:id="@+id/progressbar_load_more"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="bottom|right|end"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:visibility="@{loadingNextPage}" />
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
