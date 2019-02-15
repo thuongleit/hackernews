@@ -12,7 +12,7 @@ class FetchStoriesUseCase @Inject constructor(private val repository: ItemReposi
     : MediatorUseCase<StoryType, List<Item>>() {
 
     private val stories = mutableListOf<Long>()
-    private val data = mutableSetOf<Item>()
+    private val receivedData = mutableSetOf<Item>()
     private var requestedPos: Int = 0
 
     override fun execute(parameters: StoryType) {
@@ -34,14 +34,11 @@ class FetchStoriesUseCase @Inject constructor(private val repository: ItemReposi
     }
 
     private fun reset() {
-        data.clear()
+        receivedData.clear()
     }
 
     fun loadNextPage(): Boolean {
-        if (stories.isEmpty()) {
-            return false
-        }
-        if (requestedPos > stories.size) {
+        if (!canLoadMore()) {
             return false
         }
 
@@ -59,8 +56,8 @@ class FetchStoriesUseCase @Inject constructor(private val repository: ItemReposi
                 result.addSource(itemSource) { itemResult: Result<Item>? ->
                     if (itemResult is Result.Success) {
                         if (itemResult.data != null) {
-                            data.add(itemResult.data)
-                            result.postValue(Result.Success(data.toList()))
+                            receivedData.add(itemResult.data)
+                            result.postValue(Result.Success(receivedData.toList()))
                         }
                     }
                 }
@@ -72,7 +69,11 @@ class FetchStoriesUseCase @Inject constructor(private val repository: ItemReposi
         }
     }
 
+    fun canLoadMore(): Boolean {
+        return stories.isNotEmpty() && receivedData.size > PAGE_SIZE / 2 && requestedPos <= stories.size - 1
+    }
+
     companion object {
-        private const val PAGE_SIZE = 30
+        private const val PAGE_SIZE = 20
     }
 }

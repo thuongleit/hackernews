@@ -42,6 +42,7 @@ class ItemViewModel @Inject constructor(private val useCase: FetchStoriesUseCase
         return true
     }
 
+    fun canLoadMore() = useCase.canLoadMore()
 
     fun loadMore(): Boolean {
         nextPageLoadingStatus.postValueIfNew(Result.Running(Unit))

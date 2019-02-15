@@ -17,6 +17,8 @@ import studio.vifi.hknews.view.common.createBinding
 class ItemAdapter(private val activity: Activity) : DataBoundListAdapter<Item, StoryItemBinding>(
         DIFF_CALLBACK
 ) {
+    private var isLoading = false
+
     val onItemClick: (View, Item) -> Unit = { view, item ->
         CustomTabActivityHelper.openCustomTab(
                 activity,
@@ -48,7 +50,17 @@ class ItemAdapter(private val activity: Activity) : DataBoundListAdapter<Item, S
         binding.adapter = this
     }
 
+    fun setLoading(isLoading: Boolean) {
+        this.isLoading = isLoading
+    }
+
+    fun isLoading(): Boolean {
+        return isLoading
+    }
+
     companion object {
+        const val VISIBLE_THRESHOLD = 3
+
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
             override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
                 return oldItem.id == newItem.id

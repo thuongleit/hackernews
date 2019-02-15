@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import studio.vifi.hknews.R
 import studio.vifi.hknews.Result
 import studio.vifi.hknews.databinding.FragmentItemBinding
@@ -58,6 +60,20 @@ class ItemFragment : androidx.fragment.app.Fragment(), Injectable {
                 viewModel.fetchItems(storyType, force = true)
             }
         }
+        this.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
+                if (viewModel.canLoadMore()) {
+                    val itemCount = binding.recyclerView.layoutManager?.itemCount ?: 0
+                    val lastVisibleItemPosition = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+
+                    if (!adapter.isLoading() && (lastVisibleItemPosition + ItemAdapter.VISIBLE_THRESHOLD) >= itemCount) {
+                        viewModel.loadMore()
+                    }
+                }
+
+                super.onScrolled(view, dx, dy)
+            }
+        })
         return binding.root
     }
 
@@ -86,7 +102,9 @@ class ItemFragment : androidx.fragment.app.Fragment(), Injectable {
         })
 
         viewModel.nextPageLoadingStatus.observe(this, Observer {
-            binding.loadingNextPage = it is Result.Running
+            val isLoading = it is Result.Running
+            adapter.setLoading(isLoading)
+            binding.loadingNextPage = isLoading
         })
     }
 
