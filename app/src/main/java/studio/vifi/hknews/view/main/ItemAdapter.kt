@@ -3,14 +3,13 @@ package studio.vifi.hknews.view.main
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import studio.vifi.hknews.R
 import studio.vifi.hknews.databinding.StoryItemBinding
+import studio.vifi.hknews.model.api.BROWSER_ID_URL
+import studio.vifi.hknews.model.api.BROWSER_VOTE_ID_URL
 import studio.vifi.hknews.model.vo.Item
-import studio.vifi.hknews.util.customtabs.CustomTabActivityHelper
+import studio.vifi.hknews.openUrlInCustomTab
 import studio.vifi.hknews.view.common.DataBoundListAdapter
 import studio.vifi.hknews.view.common.createBinding
 
@@ -19,26 +18,20 @@ class ItemAdapter(private val activity: Activity) : DataBoundListAdapter<Item, S
 ) {
     private var isLoading = false
 
-    val onItemClick: (View, Item) -> Unit = { view, item ->
-        CustomTabActivityHelper.openCustomTab(
-                activity,
-                CustomTabsIntent.Builder()
-                        .setToolbarColor(
-                                ContextCompat.getColor(
-                                        activity,
-                                        R.color.colorPrimary
-                                )
-                        )
-                        .setShowTitle(true)
-                        .enableUrlBarHiding()
-                        .setSecondaryToolbarColor(ContextCompat.getColor(
-                                activity,
-                                android.R.color.white
-                        ))
-                        .addDefaultShareMenuItem()
-                        .build(),
-                item.url?.toUri()
-        )
+    val onItemClick: (View, Item) -> Unit = { _, item ->
+        if (!item.url.isNullOrBlank()) {
+            openUrlInCustomTab(activity, item.url)
+        } else {
+            openUrlInCustomTab(activity, String.format(BROWSER_ID_URL, item.id))
+        }
+    }
+
+    val onItemCommentClick: (Item) -> Unit = { item: Item ->
+        openUrlInCustomTab(activity, String.format(BROWSER_ID_URL, item.id))
+    }
+
+    val onItemVoteClick: (Item) -> Unit = { item: Item ->
+        openUrlInCustomTab(activity, String.format(BROWSER_VOTE_ID_URL, item.id))
     }
 
     override fun createItemBinding(parent: ViewGroup): StoryItemBinding {

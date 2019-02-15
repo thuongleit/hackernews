@@ -7,6 +7,8 @@ import studio.vifi.hknews.model.vo.Item
 import studio.vifi.hknews.model.vo.StoryType
 
 const val BASE_URL = "https://hacker-news.firebaseio.com/v0/"
+const val BROWSER_ID_URL = "https://news.ycombinator.com/item?id=%d"
+const val BROWSER_VOTE_ID_URL = "https://news.ycombinator.com/vote?id=%d&how=up"
 
 interface ApiService {
 

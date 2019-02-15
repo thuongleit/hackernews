@@ -39,6 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:text="@{item.score}"
+            android:onClick="@{() -> adapter.onItemVoteClick.invoke(item)}"
             app:textEmptyIfZero="@{true}" />
 
         <TextView
@@ -87,6 +88,7 @@
             app:layout_constraintStart_toEndOf="@+id/tv_description"
             app:layout_constraintTop_toTopOf="@+id/tv_description"
             app:text="@{item.descendants}"
+            android:onClick="@{() -> adapter.onItemCommentClick.invoke(item)}"
             app:visibility="@{item.descendants > 0}" />
 
         <TextView
